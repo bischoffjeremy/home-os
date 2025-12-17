@@ -1,0 +1,12 @@
+add_newline = true
+
+format = '[$os$all] '
+
+[os]
+format = '[$symbol$name]($style)'
+style = "bold blue"
+
+[character]
+success_symbol = "[➜](bold green) "
+error_symbol   = "[✗](bold red) "
+EOF

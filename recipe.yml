@@ -1,0 +1,71 @@
+---
+name: os-base
+description: Custom Aurora NVIDIA System mit Extras, Flatpaks & CH Keyboard
+base-image: ghcr.io/ublue-os/aurora-nvidia-open
+image-version: latest
+
+modules:
+  - type: dnf
+    install:
+      packages:
+        - passwd
+        - xorg-x11-drv-vmware
+        - qemu-guest-agent
+        - wireguard-tools
+        - podman
+
+  - type: files
+    files:
+      - source: starship.toml
+        destination: /usr/etc/starship.toml
+
+      # user + home definition
+      - source: fedora-user.sysusers
+        destination: /usr/lib/sysusers.d/50-fedora.conf
+      - source: fedora-home.tmpfiles
+        destination: /usr/lib/tmpfiles.d/50-fedora-home.conf
+
+      # subuid/subgid für toolbox / rootless container
+      - source: subuid
+        destination: /usr/etc/subuid
+      - source: subgid
+        destination: /usr/etc/subgid
+
+      # keyboard + locale
+      - source: vconsole.conf
+        destination: /etc/vconsole.conf
+      - source: 00-keyboard.conf
+        destination: /etc/X11/xorg.conf.d/00-keyboard.conf
+      - source: locale.conf
+        destination: /etc/locale.conf
+      # timezone
+      - source: timezone
+        destination: /etc/timezone
+
+  - type: script
+    snippets:
+      # root login aktivieren
+      - echo "root:root" | chpasswd
+      - passwd -u root
+      # wirguard ordner anlegen
+      - mkdir -p /etc/wireguard
+      # Zeitzone auf Europa/Zürich setzen
+      - ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime
+      - echo "Customizations applied."
+
+  - type: default-flatpaks
+    configurations:
+      - scope: system
+        install:
+          - com.brave.Browser
+          - com.visualstudio.code
+          - md.obsidian.Obsidian
+          - net.ankiweb.Anki
+          - com.github.xournalpp.xournalpp
+          - com.bitwarden.desktop
+          - org.ksnip.ksnip
+          - org.videolan.VLC
+          - app.ytmdesktop.ytmdesktop
+          - net.portswigger.BurpSuite-Community
+          - com.protonvpn.www
+          - com.github.jeromerobert.pdfarranger
