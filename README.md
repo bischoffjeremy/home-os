@@ -1,5 +1,5 @@
 
-![Logo](files/logo.jpg)
+![Logo](files/logo.jpeg)
 
 # 🔥 When committing, the image is automatically built and pushed to the github repo🔥
 The existing "free" github runners are used!
