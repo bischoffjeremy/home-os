@@ -1,7 +1,7 @@
 # Ailurus OS
 ---
 
-![Logo](files/logo.jpg)
+![Logo](files/wallpaper.jpg)
 
 ---
 
