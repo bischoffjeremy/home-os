@@ -5,6 +5,24 @@
 
 ---
 
+## Installed Tools
+| App | Beschreibung |
+|:---:|:-------------|
+| <img src="https://icons.duckduckgo.com/ip3/brave.com.ico" width="48"> | **Brave Browser** - Privacy focused browser |
+| <img src="https://icons.duckduckgo.com/ip3/code.visualstudio.com.ico" width="48"> | **VS Code** - Code-Editor |
+| <img src="https://icons.duckduckgo.com/ip3/obsidian.md.ico" width="48"> | **Obsidian** - Markdown Notizen |
+| <img src="https://apps.ankiweb.net/logo.svg" width="48"> | **Anki** - Karteikarten-Lernsystem |
+| <img src="https://icons.duckduckgo.com/ip3/xournalpp.github.io.ico" width="48"> | **Xournal++** - PDF Annotation |
+| <img src="https://icons.duckduckgo.com/ip3/bitwarden.com.ico" width="48"> | **Bitwarden** - Passwort-Manager |
+| <img src="https://icons.duckduckgo.com/ip3/ksnip.org.ico" width="48"> | **Ksnip** - Screenshot-Tool |
+| <img src="https://images.videolan.org/images/VLC-IconSmall.png" width="48"> | **VLC** - Media Player |
+| <img src="https://icons.duckduckgo.com/ip3/ytmdesktop.app.ico" width="48"> | **YouTube Music Desktop** - Musik-Streaming |
+| <img src="https://icons.duckduckgo.com/ip3/portswigger.net.ico" width="48"> | **Burp Suite** - Security Testing |
+| <img src="https://icons.duckduckgo.com/ip3/protonvpn.com.ico" width="48"> | **ProtonVPN** - VPN Client |
+| <img src="https://dl.flathub.org/media/com/github/jeromerobert.pdfarranger/be4cba4552137f343cab16b4ee68a747/icons/128x128/com.github.jeromerobert.pdfarranger.png" width="48"> | **PDF Arranger** - PDF Arranger |
+
+---
+
 ## 🔥 When committing, the image is automatically built and pushed to the github repo🔥
 The existing "free" github runners are used!
 
