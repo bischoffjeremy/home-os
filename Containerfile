@@ -88,10 +88,10 @@ RUN \
 
 # Labels are added last since they cause cache misses with buildah
 LABEL io.artifacthub.package.readme-url="https://raw.githubusercontent.com/blue-build/cli/main/README.md"
-LABEL org.blue-build.build-id="1f448718-aed9-42f6-8830-5dabd2b608f5"
+LABEL org.blue-build.build-id="e8006f68-8bf9-4060-836d-cf709219c715"
 LABEL org.opencontainers.image.base.digest="sha256:ff89ceb08d74fd9601b25af6849d3937db08e8d96b92a8f451615c378cd2df60"
 LABEL org.opencontainers.image.base.name="ghcr.io/ublue-os/aurora-nvidia-open:latest"
-LABEL org.opencontainers.image.created="2025-12-19T14:37:25.709045452+00:00"
+LABEL org.opencontainers.image.created="2025-12-19T14:56:04.967126661+00:00"
 LABEL org.opencontainers.image.description="Custom Aurora NVIDIA System mit Extras, Flatpaks & CH Keyboard"
 LABEL org.opencontainers.image.source=""
 LABEL org.opencontainers.image.title="os-base"

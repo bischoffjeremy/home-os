@@ -12,7 +12,7 @@
               "type": "org.osbuild.containers-storage",
               "origin": "org.osbuild.source",
               "references": {
-                "sha256:95fa6637392ad30d4c8e24b14befa1b9bc1770b8eb0bcb851b1f6880d4f08784": {
+                "sha256:ac14e7bd7b56da52a08e1ec19cb158b82a92acb3d0c98327b8b45ea5abbf1401": {
                   "name": "localhost/os-base:latest"
                 }
               }
@@ -113,7 +113,7 @@
         {
           "type": "org.osbuild.mkfs.ext4",
           "options": {
-            "uuid": "d2a1f2bf-be1a-46e6-9ffc-5d6908615a46",
+            "uuid": "09e2e5dc-f5e8-4a00-9292-77e558d5f8f5",
             "label": "boot"
           },
           "devices": {
@@ -131,7 +131,7 @@
         {
           "type": "org.osbuild.mkfs.btrfs",
           "options": {
-            "uuid": "f77b75f3-d508-469b-b0f6-859d136f3aa0",
+            "uuid": "007e212b-5877-4f7d-b601-e70162c2849c",
             "label": "root"
           },
           "devices": {
@@ -183,7 +183,7 @@
               "type": "org.osbuild.containers-storage",
               "origin": "org.osbuild.source",
               "references": {
-                "sha256:95fa6637392ad30d4c8e24b14befa1b9bc1770b8eb0bcb851b1f6880d4f08784": {
+                "sha256:ac14e7bd7b56da52a08e1ec19cb158b82a92acb3d0c98327b8b45ea5abbf1401": {
                   "name": "localhost/os-base:latest"
                 }
               }
@@ -244,7 +244,7 @@
                 "DefaultDependencies": true
               },
               "Mount": {
-                "What": "/dev/disk/by-uuid/f77b75f3-d508-469b-b0f6-859d136f3aa0",
+                "What": "/dev/disk/by-uuid/007e212b-5877-4f7d-b601-e70162c2849c",
                 "Where": "/",
                 "Type": "btrfs",
                 "Options": "subvol=root,compress=zstd:1,ro"
@@ -398,7 +398,7 @@
                 "DefaultDependencies": true
               },
               "Mount": {
-                "What": "/dev/disk/by-uuid/d2a1f2bf-be1a-46e6-9ffc-5d6908615a46",
+                "What": "/dev/disk/by-uuid/09e2e5dc-f5e8-4a00-9292-77e558d5f8f5",
                 "Where": "/boot",
                 "Type": "ext4",
                 "Options": "ro"
@@ -758,7 +758,7 @@
   "sources": {
     "org.osbuild.containers-storage": {
       "items": {
-        "sha256:95fa6637392ad30d4c8e24b14befa1b9bc1770b8eb0bcb851b1f6880d4f08784": {}
+        "sha256:ac14e7bd7b56da52a08e1ec19cb158b82a92acb3d0c98327b8b45ea5abbf1401": {}
       }
     }
   }

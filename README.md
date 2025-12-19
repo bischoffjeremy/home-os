@@ -1,11 +1,15 @@
+# Ailurus OS
+---
 
-![Logo](files/logo.jpeg)
+![Logo](files/logo.jpg)
 
-# 🔥 When committing, the image is automatically built and pushed to the github repo🔥
+---
+
+## 🔥 When committing, the image is automatically built and pushed to the github repo🔥
 The existing "free" github runners are used!
 
 
-# 🚀 Custom Aurora NVIDIA-Image
+## 🚀 Custom Aurora NVIDIA-Image
 
 Custom Fedora Aurora NVIDIA-Open Image mit BlueBuild, sysusers, tmpfiles, Root-Passwort & Schweizer Tastatur.
 
