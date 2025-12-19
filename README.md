@@ -6,20 +6,20 @@
 ---
 
 ## Installed Tools
-| App | Beschreibung |
-|:---:|:-------------|
+| App | Description |
+|:---:|:------------|
 | <img src="https://icons.duckduckgo.com/ip3/brave.com.ico" width="48"> | **Brave Browser** - Privacy focused browser |
-| <img src="https://icons.duckduckgo.com/ip3/code.visualstudio.com.ico" width="48"> | **VS Code** - Code-Editor |
-| <img src="https://icons.duckduckgo.com/ip3/obsidian.md.ico" width="48"> | **Obsidian** - Markdown Notizen |
-| <img src="https://apps.ankiweb.net/logo.svg" width="48"> | **Anki** - Karteikarten-Lernsystem |
-| <img src="https://icons.duckduckgo.com/ip3/xournalpp.github.io.ico" width="48"> | **Xournal++** - PDF Annotation |
-| <img src="https://icons.duckduckgo.com/ip3/bitwarden.com.ico" width="48"> | **Bitwarden** - Passwort-Manager |
-| <img src="https://avatars.githubusercontent.com/u/60014385?s=48&v=4" width="48"> | **Ksnip** - Screenshot-Tool |
-| <img src="https://images.videolan.org/images/VLC-IconSmall.png" width="48"> | **VLC** - Media Player |
-| <img src="https://icons.duckduckgo.com/ip3/ytmdesktop.app.ico" width="48"> | **YouTube Music Desktop** - Musik-Streaming |
-| <img src="https://icons.duckduckgo.com/ip3/portswigger.net.ico" width="48"> | **Burp Suite** - Security Testing |
-| <img src="https://icons.duckduckgo.com/ip3/protonvpn.com.ico" width="48"> | **ProtonVPN** - VPN Client |
-| <img src="https://dl.flathub.org/media/com/github/jeromerobert.pdfarranger/be4cba4552137f343cab16b4ee68a747/icons/128x128/com.github.jeromerobert.pdfarranger.png" width="48"> | **PDF Arranger** - PDF Arranger |
+| <img src="https://icons.duckduckgo.com/ip3/code.visualstudio.com.ico" width="48"> | **VS Code** - Code editor |
+| <img src="https://icons.duckduckgo.com/ip3/obsidian.md.ico" width="48"> | **Obsidian** - Markdown notes |
+| <img src="https://apps.ankiweb.net/logo.svg" width="48"> | **Anki** - Flashcard learning system |
+| <img src="https://icons.duckduckgo.com/ip3/xournalpp.github.io.ico" width="48"> | **Xournal++** - PDF annotation |
+| <img src="https://icons.duckduckgo.com/ip3/bitwarden.com.ico" width="48"> | **Bitwarden** - Password manager |
+| <img src="https://avatars.githubusercontent.com/u/60014385?s=48&v=4" width="48"> | **Ksnip** - Screenshot tool |
+| <img src="https://images.videolan.org/images/VLC-IconSmall.png" width="48"> | **VLC** - Media player |
+| <img src="https://icons.duckduckgo.com/ip3/ytmdesktop.app.ico" width="48"> | **YouTube Music Desktop** - Music streaming |
+| <img src="https://icons.duckduckgo.com/ip3/portswigger.net.ico" width="48"> | **Burp Suite** - Security testing |
+| <img src="https://icons.duckduckgo.com/ip3/protonvpn.com.ico" width="48"> | **ProtonVPN** - VPN client |
+| <img src="https://dl.flathub.org/media/com/github/jeromerobert.pdfarranger/be4cba4552137f343cab16b4ee68a747/icons/128x128/com.github.jeromerobert.pdfarranger.png" width="48"> | **PDF Arranger** - PDF editor |
 
 ---
 
@@ -29,35 +29,35 @@ The existing "free" github runners are used!
 
 ## 🚀 Custom Aurora NVIDIA-Image
 
-Custom Fedora Aurora NVIDIA-Open Image mit BlueBuild, sysusers, tmpfiles, Root-Passwort & Schweizer Tastatur.
+Custom Fedora Aurora NVIDIA-Open image with BlueBuild, sysusers, tmpfiles, root password & Swiss keyboard layout.
 
-Basiert auf **Aurora NVIDIA-Open** (Universal Blue) mit KDE Plasma, NVIDIA-Treibern und immutable bootc/OStree-Technologie.
+Based on **Aurora NVIDIA-Open** (Universal Blue) with KDE Plasma, NVIDIA drivers and immutable bootc/OStree technology.
 
 ---
 
-## ✅ Voraussetzungen
+## ✅ Prerequisites
 
-- Linux mit `podman`
-- GitHub Account
-- sudo-Rechte
+- Linux with `podman`
+- GitHub account
+- sudo privileges
 
 ---
 
 ## 🔧 Quick Start
 
-### 1. Podman bei GitHub anmelden
+### 1. Login to GitHub with Podman
 
 ```bash
-echo "DEIN_GITHUB_TOKEN" | sudo podman login ghcr.io -u DEIN_GITHUB_USERNAME --password-stdin
+echo "YOUR_GITHUB_TOKEN" | sudo podman login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
 ```
 
-### 2. BlueBuild CLI installieren
+### 2. Install BlueBuild CLI
 
 ```bash
 podman run --pull always --rm ghcr.io/blue-build/cli:latest-installer | bash
 ```
 
-### 3. Image bauen
+### 3. Build image
 
 ```bash
 touch cosign.pub cosign.key
@@ -65,7 +65,7 @@ bluebuild template recipe.yml -o Containerfile
 sudo podman build -t os-base:latest .
 ```
 
-### 4. QCOW2 erzeugen
+### 4. Create QCOW2
 
 ```bash
 sudo podman run --rm --privileged \
@@ -77,7 +77,7 @@ sudo podman run --rm --privileged \
   localhost/os-base:latest
 ```
 
-### 5. In QEMU starten
+### 5. Start in QEMU
 
 ```bash
 sudo qemu-system-x86_64 \
@@ -94,46 +94,46 @@ sudo qemu-system-x86_64 \
 
 **Login:**
 - `root` / `root`
-- `fedora` / *(nach erstem Login setzen)*
+- `fedora` / *(set after first login)*
 
 ---
 
-## 🔑 Fedora-Passwort setzen (nach erstem Boot)
+## 🔑 Set Fedora password (after first boot)
 
-Der User `fedora` wird erst beim Boot erstellt. Passwort setzen:
+The user `fedora` is created at boot time. Set password:
 
 ```bash
-passwd -d fedora     # entfernt Pflicht für "current password"
-passwd fedora        # setzt neues Passwort
+passwd -d fedora     # removes requirement for "current password"
+passwd fedora        # sets new password
 ```
 
 ---
 
 ## 🎉 Features
 
-✔ CH-Tastatur (Konsole + X11/Wayland)  
-✔ systemd-sysusers User (`fedora`)  
-✔ Persistentes `/var/home`  
-✔ Systemweite Flatpaks (Brave, VS Code, Obsidian, etc.)  
-✔ Root-Login aktiviert  
-✔ bootc/Silverblue-konform  
+✔ Swiss keyboard layout (console + X11/Wayland)  
+✔ systemd-sysusers user (`fedora`)  
+✔ Persistent `/var/home`  
+✔ System-wide Flatpaks (Brave, VS Code, Obsidian, etc.)  
+✔ Root login enabled  
+✔ bootc/Silverblue compliant  
 
 ---
 
-## 🛠️ Troubleshooting: Flatpaks installieren nicht automatisch
+## 🛠️ Troubleshooting: Flatpaks not installing automatically
 
 ```bash
-# Status prüfen
+# Check status
 systemctl status system-flatpak-setup.timer
 
-# Manuell starten
+# Start manually
 sudo systemctl restart system-flatpak-setup.timer
 
-# Oder via ujust
+# Or via ujust
 ujust install-flatpaks
 
-# Installierte Flatpaks anzeigen
+# Show installed Flatpaks
 flatpak list --system
 ```
 
-Danach: Abmelden/Neustart.
+Afterwards: Logout/Restart.
