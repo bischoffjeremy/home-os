@@ -19,6 +19,11 @@ modules:
       - source: starship.toml
         destination: /usr/etc/starship.toml
 
+      - source: default.jxl
+        destination: /usr/share/backgrounds/default.jxl
+      - source: default-dark.jxl
+        destination: /usr/share/backgrounds/default-dark.jxl
+
       # user + home definition
       - source: fedora-user.sysusers
         destination: /usr/lib/sysusers.d/50-fedora.conf

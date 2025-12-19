@@ -1,6 +1,8 @@
 
+![Logo](files/logo.jpg)
+
 # 🔥 When committing, the image is automatically built and pushed to the github repo🔥
-The existing “free” github runners are used!
+The existing "free" github runners are used!
 
 
 # 🚀 Custom Aurora NVIDIA-Image

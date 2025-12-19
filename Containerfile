@@ -25,7 +25,7 @@ COPY cosign.pub /keys/os-base.pub
 
 
 # Main image
-FROM ghcr.io/ublue-os/aurora-nvidia-open@sha256:455ef0180034a85e1c572d2455a21afe2680b2ea80404282df05a56074c6dfcf AS os-base
+FROM ghcr.io/ublue-os/aurora-nvidia-open@sha256:ff89ceb08d74fd9601b25af6849d3937db08e8d96b92a8f451615c378cd2df60 AS os-base
 ARG TARGETARCH
 ARG RECIPE=recipe.yml
 ARG IMAGE_REGISTRY=localhost
@@ -66,14 +66,14 @@ RUN \
 --mount=type=bind,src=.bluebuild-scripts_9786ec61,dst=/tmp/scripts/,ro \
   --mount=type=cache,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-os-base-latest,sharing=locked \
   --mount=type=cache,dst=/var/cache/libdnf5,id=dnf-cache-os-base-latest,sharing=locked \
-/tmp/scripts/run_module.sh 'files' '{"type":"files","files":[{"source":"starship.toml","destination":"/usr/etc/starship.toml"},{"source":"fedora-user.sysusers","destination":"/usr/lib/sysusers.d/50-fedora.conf"},{"source":"fedora-home.tmpfiles","destination":"/usr/lib/tmpfiles.d/50-fedora-home.conf"},{"source":"subuid","destination":"/usr/etc/subuid"},{"source":"subgid","destination":"/usr/etc/subgid"},{"source":"vconsole.conf","destination":"/etc/vconsole.conf"},{"source":"00-keyboard.conf","destination":"/etc/X11/xorg.conf.d/00-keyboard.conf"},{"source":"locale.conf","destination":"/etc/locale.conf"},{"source":"timezone","destination":"/etc/timezone"},{"source":"Mobile.conf","destination":"/etc/wireguard/Mobile.conf"}]}'
+/tmp/scripts/run_module.sh 'files' '{"type":"files","files":[{"source":"starship.toml","destination":"/usr/etc/starship.toml"},{"source":"default.jxl","destination":"/usr/share/backgrounds/default.jxl"},{"source":"default-dark.jxl","destination":"/usr/share/backgrounds/default-dark.jxl"},{"source":"fedora-user.sysusers","destination":"/usr/lib/sysusers.d/50-fedora.conf"},{"source":"fedora-home.tmpfiles","destination":"/usr/lib/tmpfiles.d/50-fedora-home.conf"},{"source":"subuid","destination":"/usr/etc/subuid"},{"source":"subgid","destination":"/usr/etc/subgid"},{"source":"vconsole.conf","destination":"/etc/vconsole.conf"},{"source":"00-keyboard.conf","destination":"/etc/X11/xorg.conf.d/00-keyboard.conf"},{"source":"locale.conf","destination":"/etc/locale.conf"},{"source":"timezone","destination":"/etc/timezone"}]}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
 --mount=type=bind,src=.bluebuild-scripts_9786ec61,dst=/tmp/scripts/,ro \
   --mount=type=cache,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-os-base-latest,sharing=locked \
   --mount=type=cache,dst=/var/cache/libdnf5,id=dnf-cache-os-base-latest,sharing=locked \
-/tmp/scripts/run_module.sh 'script' '{"type":"script","snippets":["echo \"root:root\" | chpasswd","passwd -u root","mkdir -p /etc/wireguard","chown root:root /etc/wireguard/Mobile.conf || true","chmod 600 /etc/wireguard/Mobile.conf || true","ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime","echo \"Customizations applied.\""]}'
+/tmp/scripts/run_module.sh 'script' '{"type":"script","snippets":["echo \"root:root\" | chpasswd","passwd -u root","mkdir -p /etc/wireguard","ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime","echo \"Customizations applied.\""]}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/default-flatpaks:latest,src=/modules,dst=/tmp/modules,rw \
@@ -88,10 +88,10 @@ RUN \
 
 # Labels are added last since they cause cache misses with buildah
 LABEL io.artifacthub.package.readme-url="https://raw.githubusercontent.com/blue-build/cli/main/README.md"
-LABEL org.blue-build.build-id="088c6b35-1831-469f-8aa3-1585307581f4"
-LABEL org.opencontainers.image.base.digest="sha256:455ef0180034a85e1c572d2455a21afe2680b2ea80404282df05a56074c6dfcf"
+LABEL org.blue-build.build-id="1f448718-aed9-42f6-8830-5dabd2b608f5"
+LABEL org.opencontainers.image.base.digest="sha256:ff89ceb08d74fd9601b25af6849d3937db08e8d96b92a8f451615c378cd2df60"
 LABEL org.opencontainers.image.base.name="ghcr.io/ublue-os/aurora-nvidia-open:latest"
-LABEL org.opencontainers.image.created="2025-12-12T08:56:13.226844325+00:00"
+LABEL org.opencontainers.image.created="2025-12-19T14:37:25.709045452+00:00"
 LABEL org.opencontainers.image.description="Custom Aurora NVIDIA System mit Extras, Flatpaks & CH Keyboard"
 LABEL org.opencontainers.image.source=""
 LABEL org.opencontainers.image.title="os-base"

@@ -12,7 +12,7 @@
               "type": "org.osbuild.containers-storage",
               "origin": "org.osbuild.source",
               "references": {
-                "sha256:ced5e95a85c290108a997bb46336d86b528d6153af4c614c7e1ef15aa012bfac": {
+                "sha256:94825f4bd671ff74ea997c205cdea6c7c0824e24bf784c70d04d6daa438d33ee": {
                   "name": "localhost/os-base:latest"
                 }
               }
@@ -46,7 +46,7 @@
           "type": "org.osbuild.truncate",
           "options": {
             "filename": "disk.raw",
-            "size": "22623027200"
+            "size": "22641901568"
           }
         },
         {
@@ -75,7 +75,7 @@
                 "uuid": "CB07C243-BC44-4717-853E-28852021225B"
               },
               {
-                "size": 41058271,
+                "size": 41095135,
                 "start": 3127296,
                 "type": "4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709",
                 "uuid": "6264D520-3FB9-423F-8AB8-7A0A8E3D3562"
@@ -113,7 +113,7 @@
         {
           "type": "org.osbuild.mkfs.ext4",
           "options": {
-            "uuid": "b64db105-8779-4ef4-8748-e3c22e3ce749",
+            "uuid": "094dd683-c4a3-443a-89f2-2cd09676e4c6",
             "label": "boot"
           },
           "devices": {
@@ -131,7 +131,7 @@
         {
           "type": "org.osbuild.mkfs.btrfs",
           "options": {
-            "uuid": "1b3be0ed-b45f-4d52-b8fe-6076187fa97f",
+            "uuid": "8ebd4310-1272-45bd-8ed0-6cc03a330fda",
             "label": "root"
           },
           "devices": {
@@ -140,7 +140,7 @@
               "options": {
                 "filename": "disk.raw",
                 "start": 3127296,
-                "size": 41058271,
+                "size": 41095135,
                 "lock": true
               }
             }
@@ -161,7 +161,7 @@
               "options": {
                 "filename": "disk.raw",
                 "start": 3127296,
-                "size": 41058271,
+                "size": 41095135,
                 "lock": true
               }
             }
@@ -183,7 +183,7 @@
               "type": "org.osbuild.containers-storage",
               "origin": "org.osbuild.source",
               "references": {
-                "sha256:ced5e95a85c290108a997bb46336d86b528d6153af4c614c7e1ef15aa012bfac": {
+                "sha256:94825f4bd671ff74ea997c205cdea6c7c0824e24bf784c70d04d6daa438d33ee": {
                   "name": "localhost/os-base:latest"
                 }
               }
@@ -244,7 +244,7 @@
                 "DefaultDependencies": true
               },
               "Mount": {
-                "What": "/dev/disk/by-uuid/1b3be0ed-b45f-4d52-b8fe-6076187fa97f",
+                "What": "/dev/disk/by-uuid/8ebd4310-1272-45bd-8ed0-6cc03a330fda",
                 "Where": "/",
                 "Type": "btrfs",
                 "Options": "subvol=root,compress=zstd:1,ro"
@@ -398,7 +398,7 @@
                 "DefaultDependencies": true
               },
               "Mount": {
-                "What": "/dev/disk/by-uuid/b64db105-8779-4ef4-8748-e3c22e3ce749",
+                "What": "/dev/disk/by-uuid/094dd683-c4a3-443a-89f2-2cd09676e4c6",
                 "Where": "/boot",
                 "Type": "ext4",
                 "Options": "ro"
@@ -758,7 +758,7 @@
   "sources": {
     "org.osbuild.containers-storage": {
       "items": {
-        "sha256:ced5e95a85c290108a997bb46336d86b528d6153af4c614c7e1ef15aa012bfac": {}
+        "sha256:94825f4bd671ff74ea997c205cdea6c7c0824e24bf784c70d04d6daa438d33ee": {}
       }
     }
   }
