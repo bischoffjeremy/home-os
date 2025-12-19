@@ -14,7 +14,7 @@
 | <img src="https://apps.ankiweb.net/logo.svg" width="48"> | **Anki** - Karteikarten-Lernsystem |
 | <img src="https://icons.duckduckgo.com/ip3/xournalpp.github.io.ico" width="48"> | **Xournal++** - PDF Annotation |
 | <img src="https://icons.duckduckgo.com/ip3/bitwarden.com.ico" width="48"> | **Bitwarden** - Passwort-Manager |
-| <img src="https://icons.duckduckgo.com/ip3/ksnip.org.ico" width="48"> | **Ksnip** - Screenshot-Tool |
+| <img src="https://avatars.githubusercontent.com/u/60014385?s=48&v=4" width="48"> | **Ksnip** - Screenshot-Tool |
 | <img src="https://images.videolan.org/images/VLC-IconSmall.png" width="48"> | **VLC** - Media Player |
 | <img src="https://icons.duckduckgo.com/ip3/ytmdesktop.app.ico" width="48"> | **YouTube Music Desktop** - Musik-Streaming |
 | <img src="https://icons.duckduckgo.com/ip3/portswigger.net.ico" width="48"> | **Burp Suite** - Security Testing |
