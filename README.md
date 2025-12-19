@@ -23,8 +23,8 @@
 
 ---
 
-## 🔥 When committing, the image is automatically built and pushed to the github repo🔥
-The existing "free" github runners are used!
+## 🔥 When code is pushed, the image will be automatically built and pushed to the GitHub repo 🔥
+The existing "free" GitHub runners are used!
 
 
 ## 🚀 Custom Aurora NVIDIA-Image
