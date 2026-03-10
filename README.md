@@ -109,6 +109,20 @@ passwd fedora        # sets new password
 
 ---
 
+
+---
+## BUILD ISO for deployment
+
+```bash
+sudo podman run --rm --privileged \
+  -v .:/output \
+  -v /var/lib/containers/storage:/var/lib/containers/storage \
+  quay.io/centos-bootc/bootc-image-builder:latest \
+  --type iso \
+  --rootfs btrfs \
+  localhost/os-base:latest
+```bash
+
 ## 🎉 Features
 
 ✔ Swiss keyboard layout (console + X11/Wayland)  
