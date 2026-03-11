@@ -9,11 +9,8 @@ modules:
     install:
       packages:
         - passwd
-        - xorg-x11-drv-vmware
-        - qemu-guest-agent
         - wireguard-tools
-        - podman
-
+        - podman-compose
   - type: files
     files:
       - source: starship.toml
