@@ -121,7 +121,7 @@ sudo podman run --rm --privileged \
   --type iso \
   --rootfs btrfs \
   localhost/os-base:latest
-```bash
+```
 
 ## 🎉 Features
 
