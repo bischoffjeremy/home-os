@@ -1,4 +1,4 @@
-FROM quay.io/toolbx-images/fedora-toolbox:latest
+FROM registry.fedoraproject.org/fedora-toolbox:latest
 
 LABEL com.github.containers.toolbox="true" \
       org.opencontainers.image.title="dev-general" \
