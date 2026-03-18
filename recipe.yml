@@ -60,7 +60,6 @@ modules:
       - scope: system
         install:
           - com.brave.Browser
-          - com.visualstudio.code
           - md.obsidian.Obsidian
           - net.ankiweb.Anki
           - com.github.xournalpp.xournalpp
