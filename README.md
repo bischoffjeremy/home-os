@@ -151,3 +151,15 @@ flatpak list --system
 ```
 
 Afterwards: Logout/Restart.
+
+---
+
+## 🧰 Dev-Container: dev-general
+
+Distrobox-Container with Python, Node.js (NVM), Podman/Docker CLI and VS Code.
+
+```bash
+distrobox create --name dev-general --image ghcr.io/bischoffjeremy/dev-general:latest
+distrobox enter dev-general
+distrobox enter dev-general -- distrobox-export --app code
+```
