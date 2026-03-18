@@ -46,5 +46,10 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc \
     && dnf install -y code \
     && dnf clean all
 
+# ── UV (Python Paketmanager) ──
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && mv /root/.local/bin/uv /usr/local/bin/uv \
+    && mv /root/.local/bin/uvx /usr/local/bin/uvx
+
 # ── Container-Socket ──
 COPY files/docker-host.sh /etc/profile.d/docker-host.sh
