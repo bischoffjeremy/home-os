@@ -1,0 +1,15 @@
+FROM registry.fedoraproject.org/fedora-toolbox:latest
+
+LABEL com.github.containers.toolbox="true" \
+      org.opencontainers.image.title="latex-env" \
+      org.opencontainers.image.description="Toolbox für LaTeX – TeX Live, BibTeX, Biber & Compiler-Tools"
+
+RUN dnf install -y \
+      git curl wget make cmake \
+      texlive-scheme-full \
+      latexmk \
+      biber \
+      pandoc \
+      poppler-utils \
+      findutils \
+    && dnf clean all
