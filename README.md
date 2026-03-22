@@ -163,3 +163,88 @@ distrobox create --name dev-general --image ghcr.io/bischoffjeremy/dev-general:l
 distrobox enter dev-general
 distrobox enter dev-general -- distrobox-export --app code
 ```
+## 🧊 Immutable System Management
+
+Since Ailurus OS is based on OSTree technology, the system image (/usr) remains immutable. Local changes on the machine are stored as a "delta". The following commands help you inspect and manage the system state:
+
+### 🔍 Show local configuration changes (Diff)
+
+Displays all files in /etc that were locally modified (M) or added (A), and therefore differ from the GitHub image:
+
+```bash
+sudo ostree admin config-diff
+```
+
+### 📟 Show local Kernel Arguments (kargs)
+
+Displays active boot parameters (useful for hardware fixes such as the 120Hz Lenovo workaround):
+
+```bash
+rpm-ostree kargs
+```
+
+### 🚀 Force clean state (Unlock Updates)
+
+If an update is stuck in a staged state and local changes are blocking it, this command cleans up pending data:
+
+```bash
+rpm-ostree cleanup -m
+```
+
+### 🔄 Check current deployment & rollback targets
+
+Shows current and previous deployments (including rollback options):
+
+```bash
+rpm-ostree status
+```
+
+### ⏪ Rollback to previous deployment
+
+Boot into the previous system image (e.g. after a broken update):
+
+```bash
+sudo rpm-ostree rollback
+reboot
+```
+
+### 📦 Show layered packages
+
+Displays manually installed packages (layered packages) that are not part of the base image:
+
+```bash
+rpm-ostree status | grep LayeredPackages -A 5
+```
+
+### ➕ Temporarily layer a package (not recommended long-term)
+
+Installs an RPM on top of the immutable image:
+
+```bash
+sudo rpm-ostree install htop
+reboot
+```
+
+### ❌ Remove layered package
+
+```bash
+sudo rpm-ostree uninstall htop
+reboot
+```
+
+### 🧹 Cleanup old deployments
+
+Removes old images and frees disk space:
+
+```bash
+rpm-ostree cleanup -p
+```
+
+### 🌐 Rebase to a new image
+
+Switch to a different container image (e.g. a new version from GitHub Container Registry):
+
+```bash
+sudo rpm-ostree rebase ghcr.io/USER/IMAGE:latest
+reboot
+```

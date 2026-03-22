@@ -5,12 +5,12 @@ base-image: ghcr.io/ublue-os/aurora-nvidia-open
 image-version: latest
 
 modules:
-  - type: dnf
+  - type: rpm-ostree
     install:
-      packages:
-        - passwd
-        - wireguard-tools
-        - podman-compose
+      - passwd
+      - wireguard-tools
+      - podman-compose
+      
   - type: files
     files:
       - source: starship.toml
@@ -43,13 +43,12 @@ modules:
       # timezone
       - source: timezone
         destination: /etc/timezone
-
-      # inotify watches erhöhen (für OSTree-Images direkt in /usr/lib einbacken)
-      - mkdir -p /usr/lib/sysctl.d
-      - echo "fs.inotify.max_user_watches=524288" > /usr/lib/sysctl.d/90-inotify.conf
       
   - type: script
     snippets:
+      # inotify watches erhöhen (Jetzt korrekt im script-Modul)
+      - mkdir -p /usr/lib/sysctl.d
+      - echo "fs.inotify.max_user_watches=524288" > /usr/lib/sysctl.d/90-inotify.conf
       # root login aktivieren
       - echo "root:root" | chpasswd
       - passwd -u root
