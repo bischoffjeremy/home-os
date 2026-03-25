@@ -2,14 +2,24 @@ FROM registry.fedoraproject.org/fedora-toolbox:latest
 
 LABEL com.github.containers.toolbox="true" \
       org.opencontainers.image.title="latex-env" \
-      org.opencontainers.image.description="Toolbox für LaTeX – TeX Live, BibTeX, Biber & Compiler-Tools"
+      org.opencontainers.image.description="Toolbox für LaTeX – TeX Live, LibreOffice, Pandoc & Compiler-Tools"
 
 RUN dnf install -y \
-      git curl wget make cmake \
+      git \
+      curl \
+      wget \
+      make \
+      cmake \
       texlive-scheme-full \
       latexmk \
       biber \
       pandoc \
       poppler-utils \
       findutils \
+      libreoffice-writer \
+      libreoffice-calc \
+      libreoffice-impress \
+      libreoffice-headless \
     && dnf clean all
+
+WORKDIR /workspace
