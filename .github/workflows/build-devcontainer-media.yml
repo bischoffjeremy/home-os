@@ -47,6 +47,7 @@ jobs:
           context: ./devcontainer/dev-media
           file: ./devcontainer/dev-media/Containerfile
           push: ${{ github.event_name != 'pull_request' }}
+          load: true
           tags: ${{ env.IMAGE }}:latest
           cache-from: type=gha,scope=dev-media
           cache-to: type=gha,mode=max,scope=dev-media
@@ -75,8 +76,8 @@ jobs:
           echo "REPORT_FILE=$REPORT_FILE" >> "$GITHUB_ENV"
           echo "IMAGE_NAME=$IMAGE_NAME" >> "$GITHUB_ENV"
 
-          # Generate RPM-only SBOM (skips npm, go, python catalogers → faster & no false positives)
-          syft "${{ env.IMAGE }}:latest" --select-catalogers os -o json > /tmp/sbom.json
+          # Generate RPM-only SBOM from local docker image (avoids re-pulling from registry)
+          syft docker:"${{ env.IMAGE }}:latest" --select-catalogers os -o json > /tmp/sbom.json
 
           grype db update
           SCAN_JSON=$(grype sbom:/tmp/sbom.json -o json 2>/dev/null)
