@@ -1,0 +1,142 @@
+name: Build Dev Container (dev-media)
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'devcontainer/dev-media/**'
+      - '.github/workflows/build-devcontainer-media.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'devcontainer/dev-media/**'
+      - '.github/workflows/build-devcontainer-media.yml'
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/dev-media
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push dev container image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./devcontainer/dev-media
+          file: ./devcontainer/dev-media/Containerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.IMAGE }}:latest
+          cache-from: type=gha,scope=dev-media
+          cache-to: type=gha,mode=max,scope=dev-media
+
+      # ── Supply-Chain Security ──────────────────────────────
+
+      - name: Install Cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@v3
+
+      - name: Install Syft
+        if: github.event_name != 'pull_request'
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Install Grype
+        if: github.event_name != 'pull_request'
+        uses: anchore/scan-action/download-grype@v4
+
+      - name: Scan image & generate report
+        if: github.event_name != 'pull_request'
+        env:
+          GRYPE_DB_VALIDATE_AGE: "false"
+        run: |
+          IMAGE_NAME=$(basename "${{ env.IMAGE }}")
+          REPORT_FILE="reports/${IMAGE_NAME}-security.md"
+          echo "REPORT_FILE=$REPORT_FILE" >> "$GITHUB_ENV"
+          echo "IMAGE_NAME=$IMAGE_NAME" >> "$GITHUB_ENV"
+
+          # Generate RPM-only SBOM (skips npm, go, python catalogers → faster & no false positives)
+          syft "${{ env.IMAGE }}:latest" --select-catalogers os -o json > /tmp/sbom.json
+
+          grype db update
+          SCAN_JSON=$(grype sbom:/tmp/sbom.json -o json 2>/dev/null)
+
+          TOTAL=$(echo "$SCAN_JSON" | jq '.matches | length' 2>/dev/null || echo 0)
+          CRIT=$(echo "$SCAN_JSON" | jq '[.matches[] | select(.vulnerability.severity=="Critical")] | length' 2>/dev/null || echo 0)
+          HIGH=$(echo "$SCAN_JSON" | jq '[.matches[] | select(.vulnerability.severity=="High")] | length' 2>/dev/null || echo 0)
+          MED=$(echo "$SCAN_JSON" | jq '[.matches[] | select(.vulnerability.severity=="Medium")] | length' 2>/dev/null || echo 0)
+          LOW=$(echo "$SCAN_JSON" | jq '[.matches[] | select(.vulnerability.severity=="Low")] | length' 2>/dev/null || echo 0)
+          NEG=$(echo "$SCAN_JSON" | jq '[.matches[] | select(.vulnerability.severity=="Negligible")] | length' 2>/dev/null || echo 0)
+
+          if [ "$CRIT" -eq 0 ]; then STATUS="PASS ✅"; SCAN_EXIT=0; else STATUS="FAIL ❌"; SCAN_EXIT=1; fi
+
+          VULN_TABLE=$(echo "$SCAN_JSON" | jq -r '
+            [.matches[] | {
+              s: .vulnerability.severity,
+              p: .artifact.name,
+              v: .artifact.version,
+              f: (if .vulnerability.fix.versions and (.vulnerability.fix.versions|length)>0 then .vulnerability.fix.versions[0] else "—" end),
+              id: .vulnerability.id,
+              u: (.vulnerability.dataSource // "")
+            }] | sort_by(if .s=="Critical" then 0 elif .s=="High" then 1 elif .s=="Medium" then 2 elif .s=="Low" then 3 else 4 end)
+            | unique_by(.id + .p)[] | "| \(.s) | \(.p) | \(.v) | \(.f) | [\(.id)](\(.u)) |"' 2>/dev/null)
+          [ -z "$VULN_TABLE" ] && VULN_TABLE="| — | — | — | — | — |"
+
+          mkdir -p reports
+          cat > "$REPORT_FILE" <<REPORT
+          # Security Report: ${IMAGE_NAME}
+
+          **Last scan:** $(date -u '+%Y-%m-%d %H:%M UTC')
+          **Image:** \`${{ env.IMAGE }}:latest\`
+
+          ## Status
+
+          | | |
+          |:--|:--|
+          | **Result** | $STATUS |
+          | **Policy** | Fail on **Critical** severity |
+
+          | Severity | Count |
+          |:---------|------:|
+          | 🔴 Critical | $CRIT |
+          | 🟠 High | $HIGH |
+          | 🟡 Medium | $MED |
+          | 🔵 Low | $LOW |
+          | ⚪ Negligible | $NEG |
+          | **Total** | **$TOTAL** |
+
+          ## Vulnerabilities
+
+          | Severity | Package | Installed | Fixed In | CVE |
+          |:---------|:--------|:----------|:---------|:----|
+          $VULN_TABLE
+          REPORT
+          sed -i 's/^          //' "$REPORT_FILE"
+          cat "$REPORT_FILE" >> "$GITHUB_STEP_SUMMARY"
+
+          exit $SCAN_EXIT
+
+      - name: Sign image with Cosign (keyless)
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign sign --yes "${{ env.IMAGE }}@${{ steps.build.outputs.digest }}"

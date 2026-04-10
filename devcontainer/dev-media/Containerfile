@@ -1,0 +1,31 @@
+FROM registry.fedoraproject.org/fedora-toolbox:latest
+
+LABEL com.github.containers.toolbox="true" \
+      org.opencontainers.image.title="dev-media" \
+      org.opencontainers.image.description="Dev-Container für Home-OS – GIMP, Inkscape, Krita, Kdenlive, Blender, Audacity & CLI-Tools"
+
+# ── Grafik & Design ──
+RUN dnf install -y \
+      gimp \
+      inkscape \
+      krita \
+      darktable \
+    && dnf clean all
+
+
+# ── Video & Audio ──
+RUN dnf install -y \
+                  kdenlive \
+                  blender \
+                  audacity \
+                  obs-studio \
+            && dnf clean all
+
+# ── CLI-Tools für Medien ──
+RUN dnf install -y \
+      ffmpeg-free \
+      ImageMagick \
+      exiftool \
+    && dnf clean all
+
+WORKDIR /workspace

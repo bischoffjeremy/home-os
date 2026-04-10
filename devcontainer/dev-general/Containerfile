@@ -1,0 +1,55 @@
+FROM registry.fedoraproject.org/fedora-toolbox:latest
+
+LABEL com.github.containers.toolbox="true" \
+      org.opencontainers.image.title="dev-general" \
+      org.opencontainers.image.description="Dev-Container für Home-OS – Python, Node.js, Podman, Docker CLI & VS Code"
+
+# ── System-Basics ──
+RUN dnf install -y \
+      git curl wget \
+      gcc gcc-c++ make cmake \
+      findutils procps-ng \
+      python3 python3-pip python3-devel \
+      podman \
+      ripgrep fd-find bat jq \
+      htop gh ShellCheck \
+    && dnf clean all
+
+# ── Docker CE CLI ──
+RUN curl -fsSL https://download.docker.com/linux/fedora/docker-ce.repo \
+      -o /etc/yum.repos.d/docker-ce.repo \
+    && dnf install -y docker-ce-cli \
+    && dnf clean all
+
+# ── Node Version Manager ──
+ENV NVM_DIR=/opt/nvm
+RUN mkdir -p "${NVM_DIR}" \
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash \
+    && . "${NVM_DIR}/nvm.sh" \
+    && nvm install --lts \
+    && nvm alias default lts/* \
+    && nvm cache clear \
+    && chmod -R a+rx "${NVM_DIR}"
+
+COPY files/nvm.sh /etc/profile.d/nvm.sh
+
+# ── Visual Studio Code ──
+RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc \
+    && printf '%s\n' \
+       '[code]' \
+       'name=Visual Studio Code' \
+       'baseurl=https://packages.microsoft.com/yumrepos/vscode' \
+       'enabled=1' \
+       'gpgcheck=1' \
+       'gpgkey=https://packages.microsoft.com/keys/microsoft.asc' \
+       > /etc/yum.repos.d/vscode.repo \
+    && dnf install -y code \
+    && dnf clean all
+
+# ── UV (Python Paketmanager) ──
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && mv /root/.local/bin/uv /usr/local/bin/uv \
+    && mv /root/.local/bin/uvx /usr/local/bin/uvx
+
+# ── Container-Socket ──
+COPY files/docker-host.sh /etc/profile.d/docker-host.sh
