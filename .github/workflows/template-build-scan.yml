@@ -125,7 +125,9 @@ jobs:
       - name: Scan & Filter RPMs (OS Image)
         if: ${{ inputs.is_os_image }}
         run: |
-          docker create --name temp_os "${{ env.IMAGE }}:latest"
+          # FIX: /bin/true angehängt, um den "no command specified" Fehler zu vermeiden
+          docker create --name temp_os "${{ env.IMAGE }}:latest" /bin/true
+          
           docker cp temp_os:/usr/lib/sysimage/rpm ./rpm-db
           docker rm temp_os
           
@@ -136,8 +138,6 @@ jobs:
           grype sbom:/tmp/sbom.json -o json > /tmp/raw_scan.json 2>/dev/null || true
           PKGS_JSON=$(jq -R . added_packages.txt | jq -s 'map(select(length > 0))')
           jq --argjson pkgs "$PKGS_JSON" '.matches |= map(select(.artifact.name | IN($pkgs[])))' /tmp/raw_scan.json > /tmp/scan_results.json
-
-      # ── Gemeinsames Reporting ──
       - name: Generate Markdown Report
         run: |
           IMAGE_NAME=$(basename "${{ env.IMAGE }}")
