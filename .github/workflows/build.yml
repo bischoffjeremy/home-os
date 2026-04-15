@@ -86,7 +86,7 @@ jobs:
     needs: build
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     continue-on-error: true
     permissions:
       contents: read
