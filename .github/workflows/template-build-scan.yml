@@ -125,10 +125,10 @@ jobs:
       - name: Scan & Filter RPMs (OS Image)
         if: ${{ inputs.is_os_image }}
         run: |
-          # FIX: /bin/true angehängt, um den "no command specified" Fehler zu vermeiden
           docker create --name temp_os "${{ env.IMAGE }}:latest" /bin/true
           
-          docker cp temp_os:/usr/lib/sysimage/rpm ./rpm-db
+          docker cp temp_os:/usr/share/rpm ./rpm-db
+          
           docker rm temp_os
           
           syft dir:./rpm-db -o json > /tmp/sbom.json
