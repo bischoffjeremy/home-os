@@ -17,6 +17,10 @@ on:
 
 jobs:
   build-and-scan:
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     uses: ./.github/workflows/template-build-scan.yml
     with:
       image_name: 'dev-general'
