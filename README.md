@@ -24,6 +24,7 @@ All images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/) 
 | **dev-general** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-general) |
 | **dev-docs** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-docs) |
 | **dev-media** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-media) |
+| **dev-pentest** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-pentest) |
 
 ---
 
@@ -54,6 +55,7 @@ This project includes open-source Distrobox dev containers that anyone can use f
 | **dev-general** | Python, Node.js, Podman/Docker CLI, VS Code | `ghcr.io/bischoffjeremy/dev-general:latest` |
 | **dev-docs** | TeX Live, LibreOffice, Pandoc | `ghcr.io/bischoffjeremy/dev-docs:latest` |
 | **dev-media** | GIMP, Inkscape, Krita, Kdenlive, Blender, Audacity | `ghcr.io/bischoffjeremy/dev-media:latest` |
+| **dev-pentest** | Kali MCP Server – HTTP API auf Port 5000 (`http://localhost:5000/mcp`) | `ghcr.io/bischoffjeremy/dev-pentest:latest` |
 
 ```bash
 distrobox create --name dev-general --image ghcr.io/bischoffjeremy/dev-general:latest
@@ -72,6 +74,7 @@ All images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/) 
 | dev-general | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) |
 | dev-docs | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) |
 | dev-media | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) |
+| dev-pentest | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) |
 
 Verify any image:
 
