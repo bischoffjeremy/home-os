@@ -1,6 +1,6 @@
 # Ailurus OS
 
-![Logo](logo/Wallpaper-small.svg)
+![Logo](logo/Wallpaper-small.png)
 
 ---
 
