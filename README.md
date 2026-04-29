@@ -55,7 +55,7 @@ This project includes open-source Distrobox dev containers that anyone can use f
 | **dev-general** | Python, Node.js, Podman/Docker CLI, VS Code | `ghcr.io/bischoffjeremy/dev-general:latest` |
 | **dev-docs** | TeX Live, LibreOffice, Pandoc | `ghcr.io/bischoffjeremy/dev-docs:latest` |
 | **dev-media** | GIMP, Inkscape, Krita, Kdenlive, Blender, Audacity | `ghcr.io/bischoffjeremy/dev-media:latest` |
-| **dev-pentest** | Kali MCP Server – HTTP API auf Port 5000 (`http://localhost:5000/mcp`) | `ghcr.io/bischoffjeremy/dev-pentest:latest` |
+| **dev-pentest** | Kali MCP Server – HTTP API auf Port 6000 (`http://localhost:6000/mcp`) | `ghcr.io/bischoffjeremy/dev-pentest:latest` |
 
 ```bash
 distrobox create --name dev-general --image ghcr.io/bischoffjeremy/dev-general:latest
