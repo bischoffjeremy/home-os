@@ -1,32 +1,34 @@
-FROM registry.fedoraproject.org/fedora-toolbox:latest
+FROM registry.fedoraproject.org/fedora-toolbox:40
 
 LABEL com.github.containers.toolbox="true" \
       org.opencontainers.image.title="dev-citrix" \
       org.opencontainers.image.description="Toolbox for Citrix Workspace App – ICAClient for remote desktop connections"
 
 # ── Dependencies ──
+# webkit2gtk4.0 provides libwebkit2gtk-4.0.so.37 natively on Fedora 40.
 RUN dnf install -y \
       curl \
-      webkit2gtk4.1 \
+      tar \
       libXScrnSaver \
-      libX11 \
       libXinerama \
-      nss \
-      nss-tools \
+      webkit2gtk4.0 \
       ca-certificates \
     && dnf clean all
 
-# ── Citrix ICAClient automatic download & install ──
-# The download page embeds a signed URL (with __gda__ token) directly in the
-# HTML source – no manual EULA confirmation or cookies required.
+# ── Citrix Workspace App – automated tarball install ──
+# The download page embeds a signed URL (__gda__ token) in its HTML source –
+# no manual EULA confirmation or cookies required.
 RUN CITRIX_URL="https://$(curl -fsSL \
       'https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html' \
-      | grep -o 'downloads\.citrix\.com/[0-9]*/ICAClient-rhel[^"<& ]*__gda__[^"<& ]*' \
+      | grep -o 'downloads\.citrix\.com/[0-9]*/linuxx64[^"<& ]*__gda__[^"<& ]*' \
       | head -1)" \
     && echo "Downloading: ${CITRIX_URL}" \
-    && curl -fsSL -o /tmp/icaclient.rpm "${CITRIX_URL}" \
-    && rpm -i --nodeps /tmp/icaclient.rpm \
-    && rm -f /tmp/icaclient.rpm
+    && curl -fsSL -o /tmp/icaclient.tar.gz "${CITRIX_URL}" \
+    && mkdir -p /tmp/citrix-install \
+    && tar xzf /tmp/icaclient.tar.gz -C /tmp/citrix-install \
+    && cd /tmp/citrix-install \
+    && printf '1\n\n\ny\nn\nn\n3\n' | ./setupwfc \
+    && rm -rf /tmp/icaclient.tar.gz /tmp/citrix-install
 
 # ── SSL Certificate Fix ──
 # Without this symlink, TLS connections to Citrix gateways will fail.
