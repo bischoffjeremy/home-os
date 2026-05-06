@@ -1,0 +1,29 @@
+name: Build Dev Container (dev-citrix)
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'devcontainer/dev-citrix/**'
+      - '.github/workflows/build-devcontainer-citrix.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'devcontainer/dev-citrix/**'
+      - '.github/workflows/build-devcontainer-citrix.yml'
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-scan:
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: ./.github/workflows/template-build-scan.yml
+    with:
+      image_name: 'dev-citrix'
+      context: './devcontainer/dev-citrix'
+      dockerfile: './devcontainer/dev-citrix/Containerfile'
+    secrets: inherit

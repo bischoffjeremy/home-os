@@ -1,0 +1,38 @@
+FROM registry.fedoraproject.org/fedora-toolbox:latest
+
+LABEL com.github.containers.toolbox="true" \
+      org.opencontainers.image.title="dev-citrix" \
+      org.opencontainers.image.description="Toolbox for Citrix Workspace App – ICAClient for remote desktop connections"
+
+# ── Dependencies ──
+RUN dnf install -y \
+      curl \
+      webkit2gtk4.1 \
+      libXScrnSaver \
+      libX11 \
+      libXinerama \
+      nss \
+      nss-tools \
+      ca-certificates \
+    && dnf clean all
+
+# ── Citrix ICAClient automatic download & install ──
+# The download page embeds a signed URL (with __gda__ token) directly in the
+# HTML source – no manual EULA confirmation or cookies required.
+RUN CITRIX_URL="https://$(curl -fsSL \
+      'https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html' \
+      | grep -o 'downloads\.citrix\.com/[0-9]*/ICAClient-rhel[^"<& ]*__gda__[^"<& ]*' \
+      | head -1)" \
+    && echo "Downloading: ${CITRIX_URL}" \
+    && curl -fsSL -o /tmp/icaclient.rpm "${CITRIX_URL}" \
+    && rpm -i --nodeps /tmp/icaclient.rpm \
+    && rm -f /tmp/icaclient.rpm
+
+# ── SSL Certificate Fix ──
+# Without this symlink, TLS connections to Citrix gateways will fail.
+RUN ln -sf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
+           /opt/Citrix/ICAClient/keystore/cacerts/tls-ca-bundle.pem
+
+# ── Helper Script ──
+COPY files/wfica.sh /usr/local/bin/wfica.sh
+RUN chmod +x /usr/local/bin/wfica.sh
