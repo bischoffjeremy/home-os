@@ -21,6 +21,19 @@ RUN curl -fsSL https://download.docker.com/linux/fedora/docker-ce.repo \
     && dnf install -y docker-ce-cli \
     && dnf clean all
 
+# ── Antigravity Repository ──
+RUN tee /etc/yum.repos.d/antigravity.repo << EOL
+[antigravity-rpm]
+name=Antigravity RPM Repository
+baseurl=https://us-central1-yum.pkg.dev/projects/antigravity-auto-updater-dev/antigravity-rpm
+enabled=1
+gpgcheck=0
+EOL
+
+RUN dnf makecache \
+    && dnf install -y antigravity \
+    && dnf clean all
+
 # ── Node Version Manager ──
 ENV NVM_DIR=/opt/nvm
 RUN mkdir -p "${NVM_DIR}" \
