@@ -1,0 +1,29 @@
+name: Build OS Image
+
+on:
+  push:
+    branches: [main, master]
+    paths-ignore:
+      - 'devcontainer/**'
+  pull_request:
+    branches: [main, master]
+    paths-ignore:
+      - 'devcontainer/**'
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-scan:
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: ./.github/workflows/template-build-scan.yml
+    with:
+      image_name: 'os-base'
+      context: '.'
+      dockerfile: './Containerfile'
+      is_os_image: true          
+      recipe_path: 'recipe.yml'
+    secrets: inherit

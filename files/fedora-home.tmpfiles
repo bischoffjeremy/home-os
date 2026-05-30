@@ -1,0 +1,4 @@
+d /var/home                 0755 root   root   -
+d /var/home/fedora          0700 fedora fedora -
+d /var/home/fedora/.config  0700 fedora fedora -
+d /var/home/fedora/.cache   0700 fedora fedora -

@@ -1,0 +1,39 @@
+FROM registry.fedoraproject.org/fedora-toolbox:40
+
+LABEL com.github.containers.toolbox="true" \
+      org.opencontainers.image.title="dev-citrix" \
+      org.opencontainers.image.description="Toolbox for Citrix Workspace App – ICAClient for remote desktop connections"
+
+
+RUN dnf install -y \
+      curl \
+      tar \
+      libXScrnSaver \
+      libXinerama \
+      webkit2gtk4.0 \
+      ca-certificates \
+    && dnf clean all
+
+# ── Citrix Workspace App – automated tarball install ──
+# The download page embeds a signed URL (__gda__ token) in its HTML source –
+# no manual EULA confirmation or cookies required.
+RUN CITRIX_URL="https://$(curl -fsSL \
+      'https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html' \
+      | grep -o 'downloads\.citrix\.com/[0-9]*/linuxx64[^"<& ]*__gda__[^"<& ]*' \
+      | head -1)" \
+    && echo "Downloading: ${CITRIX_URL}" \
+    && curl -fsSL -o /tmp/icaclient.tar.gz "${CITRIX_URL}" \
+    && mkdir -p /tmp/citrix-install \
+    && tar xzf /tmp/icaclient.tar.gz -C /tmp/citrix-install \
+    && cd /tmp/citrix-install \
+    && printf '1\n\n\ny\nn\nn\n3\n' | ./setupwfc \
+    && rm -rf /tmp/icaclient.tar.gz /tmp/citrix-install
+
+# ── SSL Certificate Fix ──
+# Without this symlink, TLS connections to Citrix gateways will fail.
+RUN ln -sf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
+           /opt/Citrix/ICAClient/keystore/cacerts/tls-ca-bundle.pem
+
+# ── Helper Script ──
+COPY files/wfica.sh /usr/local/bin/wfica.sh
+RUN chmod +x /usr/local/bin/wfica.sh
