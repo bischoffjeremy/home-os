@@ -13,7 +13,6 @@ RUN dnf install -y \
       podman \
       ripgrep fd-find bat jq \
       htop gh ShellCheck \
-      freerdp \
     && dnf clean all
 
 # ── Docker CE CLI ──
@@ -65,27 +64,5 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
     && mv /root/.local/bin/uv /usr/local/bin/uv \
     && mv /root/.local/bin/uvx /usr/local/bin/uvx
 
-# ── Container-Socket (WinBoat Compatibility: Export DOCKER_HOST globally in all shells) ──
+# ── Container-Socket ──
 COPY files/docker-host.sh /etc/profile.d/docker-host.sh
-RUN echo "source /etc/profile.d/docker-host.sh" >> /etc/bashrc
-
-# ── ID Wrapper (WinBoat Compatibility: Mocks the 'docker' group check) ──
-RUN tee /usr/local/bin/id << 'EOF'
-#!/bin/bash
-has_G=false
-has_n=false
-for arg in "$@"; do
-    if [[ "$arg" == -* ]]; then
-        if [[ "$arg" == *G* ]]; then has_G=true; fi
-        if [[ "$arg" == *n* ]]; then has_n=true; fi
-    fi
-done
-
-if [ "$has_G" = true ] && [ "$has_n" = true ]; then
-    /usr/bin/id "$@" | tr -d '\n'
-    echo " docker"
-else
-    exec /usr/bin/id "$@"
-fi
-EOF
-RUN chmod +x /usr/local/bin/id
