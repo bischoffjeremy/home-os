@@ -67,9 +67,12 @@ modules:
       # Voxtype: System-Default-Config (multilinguales Modell + paste-Modus für KDE/CH)
       - source: voxtype-config.toml
         destination: /etc/voxtype/config.toml
-      # Voxtype: Vulkan-GPU für den User-Service erzwingen (VOXTYPE_GPU=1)
+      # Voxtype: Drop-in (Vulkan-GPU + ydotool-Socket) für den User-Service
       - source: voxtype-gpu.conf
         destination: /usr/lib/systemd/user/voxtype.service.d/10-gpu.conf
+      # ydotool als User-Service (Fedora liefert nur ein System-Unit) – für paste-Modus
+      - source: ydotool-user.service
+        destination: /usr/lib/systemd/user/ydotool.service
 
   - type: script
     snippets:
