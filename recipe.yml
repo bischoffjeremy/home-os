@@ -27,8 +27,9 @@ modules:
       - pipewire-alsa
       - playerctl
       # Voxtype selbst (Version hier bumpen). Bringt alle Engines mit
-      # (CPU AVX2/512, ONNX, Vulkan, CUDA 12/13). Whisper-Modell wird beim Build
-      # nach /usr/share/voxtype/models gelegt (siehe script-Modul unten).
+      # (CPU AVX2/512, ONNX, Vulkan, CUDA 12/13). Modell-Download & persönliche
+      # Einstellungen (Modell, paste-Modus, GPU, Autostart) macht der User zur
+      # Laufzeit in ~/.config – das Image bleibt generisch.
       - https://github.com/peteonrails/voxtype/releases/download/v0.7.5/voxtype-0.7.5-1.x86_64.rpm
 
   - type: files
@@ -64,16 +65,6 @@ modules:
       - source: timezone
         destination: /etc/timezone
 
-      # Voxtype: System-Default-Config (multilinguales Modell + paste-Modus für KDE/CH)
-      - source: voxtype-config.toml
-        destination: /etc/voxtype/config.toml
-      # Voxtype: Drop-in (Vulkan-GPU + ydotool-Socket) für den User-Service
-      - source: voxtype-gpu.conf
-        destination: /usr/lib/systemd/user/voxtype.service.d/10-gpu.conf
-      # ydotool als User-Service (Fedora liefert nur ein System-Unit) – für paste-Modus
-      - source: ydotool-user.service
-        destination: /usr/lib/systemd/user/ydotool.service
-
   - type: script
     snippets:
       # increase inotify watches
@@ -86,20 +77,7 @@ modules:
       - mkdir -p /etc/wireguard
       # set timezone to Europe/Zurich
       - ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime
-      # Voxtype: multilinguales Whisper-Modell ins Image backen (kein per-User-Download).
-      # Für mehr Genauigkeit ggml-medium.bin / ggml-large-v3-turbo.bin laden und in
-      # files/voxtype-config.toml den model-Pfad anpassen.
-      - mkdir -p /usr/share/voxtype/models
-      - curl -fsSL -o /usr/share/voxtype/models/ggml-small.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin
       - echo "Customizations applied."
-
-  # Voxtype + ydotool als User-Dienste beim grafischen Login automatisch starten.
-  # (Modell ist gebacken, daher kein Crash-Loop; voxtype.service zieht ydotool via Wants.)
-  - type: systemd
-    user:
-      enabled:
-        - voxtype.service
-        - ydotool.service
 
   - type: default-flatpaks
     configurations:
