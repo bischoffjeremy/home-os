@@ -115,10 +115,10 @@ jobs:
 
   scan:
     needs: build
+    # Bewusst nur Dev-Container – das OS-Image wird nicht gescannt (Rahmen).
     if: github.event_name != 'pull_request' && !inputs.is_os_image
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    continue-on-error: true
     permissions:
       contents: read
       packages: read
@@ -144,9 +144,21 @@ jobs:
       - name: Scan Full Image (Dev Container)
         if: ${{ !inputs.is_os_image }}
         run: |
+          set -euo pipefail
           docker pull "${{ env.IMAGE }}:latest"
-          syft docker:"${{ env.IMAGE }}:latest" --select-catalogers os -o json > /tmp/sbom.json
-          grype sbom:/tmp/sbom.json -o json > /tmp/scan_results.json 2>/dev/null || true
+          # Alle Ökosysteme katalogisieren (os + npm/pip/cargo/…), nicht nur RPM
+          syft docker:"${{ env.IMAGE }}:latest" -o json > /tmp/sbom.json
+
+          # Sanity-Check: 0 Pakete = kaputter Scan, NICHT "sauber" -> hart failen
+          PKGS=$(jq '.artifacts | length' /tmp/sbom.json)
+          echo "SBOM-Pakete: $PKGS"
+          if [ "$PKGS" -eq 0 ]; then
+            echo "::error::SBOM enthält 0 Pakete – Scan ist kaputt, das ist kein echtes PASS."
+            exit 1
+          fi
+
+          # Grype-Fehler NICHT verschlucken (Default-Exit 0 auch bei Funden; SCAN_EXIT gated später)
+          grype sbom:/tmp/sbom.json -o json > /tmp/scan_results.json
 
       - name: Generate Markdown Report
         run: |
@@ -160,7 +172,7 @@ jobs:
           LOW=$(jq '[.matches[] | select(.vulnerability.severity=="Low")] | length' /tmp/scan_results.json 2>/dev/null || echo 0)
           NEG=$(jq '[.matches[] | select(.vulnerability.severity=="Negligible")] | length' /tmp/scan_results.json 2>/dev/null || echo 0)
 
-          if [ "$CRIT" -eq 0 ]; then STATUS="PASS ✅"; SCAN_EXIT=0; else STATUS="FAIL ❌"; SCAN_EXIT=1; fi
+          if [ "$CRIT" -eq 0 ] && [ "$HIGH" -eq 0 ]; then STATUS="PASS ✅"; SCAN_EXIT=0; else STATUS="FAIL ❌"; SCAN_EXIT=1; fi
 
           VULN_TABLE=$(jq -r '
             [.matches[] | {
@@ -186,7 +198,7 @@ jobs:
           | | |
           |:--|:--|
           | **Result** | $STATUS |
-          | **Policy** | Fail on **Critical** severity |
+          | **Policy** | Fail on **Critical** or **High** severity |
 
           | Severity | Count |
           |:---------|------:|
