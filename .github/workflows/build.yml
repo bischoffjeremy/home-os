@@ -5,12 +5,20 @@ on:
     branches: [main, master]
     paths-ignore:
       - 'devcontainer/**'
+      # uConsole-only files -> handled by build-uconsole.yml, no notebook rebuild.
+      # (recipes/common.yml is shared, so it is NOT ignored here.)
+      - 'recipe-uconsole.yml'
+      - 'Containerfile-uconsole'
+      - '.github/workflows/build-uconsole.yml'
   pull_request:
     branches: [main, master]
     paths-ignore:
       - 'devcontainer/**'
+      - 'recipe-uconsole.yml'
+      - 'Containerfile-uconsole'
+      - '.github/workflows/build-uconsole.yml'
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '0 6 * * 1'
   workflow_dispatch:
 
 jobs:
