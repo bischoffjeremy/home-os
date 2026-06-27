@@ -15,6 +15,15 @@ modules:
     install:
       - https://github.com/peteonrails/voxtype/releases/download/v0.7.5/voxtype-0.7.5-1.x86_64.rpm
 
+  # x86-only Flatpaks: no aarch64 build on Flathub, so they must NOT go in the
+  # shared common.yml list (would abort the whole uConsole install). Steam is
+  # x86_64-only ("only-arches": ["x86_64"] in its flathub.json).
+  - type: default-flatpaks
+    configurations:
+      - scope: system
+        install:
+          - com.valvesoftware.Steam
+
   # Notebook-specific configs: starship (ships with Aurora/ublue, not Kinoite),
   # declarative "fedora" user + subuid/subgid for toolbox / rootless containers.
   - type: files

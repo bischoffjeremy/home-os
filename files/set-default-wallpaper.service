@@ -1,0 +1,14 @@
+[Unit]
+Description=Set the default Plasma wallpaper once per user
+# Runs once per user; the flag file makes later manual wallpaper changes stick.
+# Touching the flag only happens on success, so a failed run retries next login.
+ConditionPathExists=!%h/.config/.default-wallpaper-applied
+After=plasma-workspace.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/plasma-apply-wallpaperimage /usr/share/backgrounds/default.jxl
+ExecStartPost=/usr/bin/touch %h/.config/.default-wallpaper-applied
+
+[Install]
+WantedBy=plasma-workspace.target
