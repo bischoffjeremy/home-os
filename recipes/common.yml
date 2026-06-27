@@ -32,6 +32,12 @@ modules:
         destination: /etc/locale.conf
       - source: timezone
         destination: /etc/timezone
+      # Per-user oneshot that applies the default wallpaper once (see script below).
+      # A user service is used on purpose: editing the Plasma shell-layout file
+      # (plasma-org.kde.plasma.desktop-appletsrc) system-wide risks wiping the
+      # default panel; plasma-apply-wallpaperimage only touches the wallpaper.
+      - source: set-default-wallpaper.service
+        destination: /usr/lib/systemd/user/set-default-wallpaper.service
 
   # --- Shared system tweaks ---
   - type: script
@@ -45,11 +51,23 @@ modules:
       # wireguard dir + timezone
       - mkdir -p /etc/wireguard
       - ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime
+      # Default wallpaper, set centrally for both devices:
+      #   - desktop: enable the per-user oneshot (installed via files above)
+      #   - lockscreen: system default via kwriteconfig6 (kscreenlockerrc is a
+      #     plain config, not the shell layout -> safe to merge a key into it)
+      - systemctl --global enable set-default-wallpaper.service
+      - kwriteconfig6 --file /etc/xdg/kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file:///usr/share/backgrounds/default.jxl"
       - echo "Shared customizations applied."
 
-  # --- Shared Flatpaks (system scope) ---
-  #     Installed at first boot by the flatpak manager service. x86-only apps
-  #     (e.g. Steam) have no aarch64 build and are simply skipped on the uConsole.
+  # --- Shared Flatpaks (system scope, both devices) ---
+  #     Installed at first boot by the flatpak manager service, which runs a
+  #     SINGLE `flatpak install <all apps>` per configuration. If even one app
+  #     has no aarch64 build, that command fails to resolve and installs NOTHING
+  #     on the uConsole (it does NOT skip the missing app). So this shared list
+  #     must contain ONLY apps that have aarch64 builds. x86-only apps (Steam)
+  #     live in recipe.yml so they only target the Aurora/x86 image.
+  #     Verified aarch64 on Flathub: brave, obsidian, anki, xournalpp, bitwarden,
+  #     ksnip, vlc, ytmdesktop, burpsuite (arch-indep JAR), protonvpn, pdfarranger.
   - type: default-flatpaks
     configurations:
       - scope: system
@@ -65,4 +83,3 @@ modules:
           - net.portswigger.BurpSuite-Community
           - com.protonvpn.www
           - com.github.jeromerobert.pdfarranger
-          - com.valvesoftware.Steam
