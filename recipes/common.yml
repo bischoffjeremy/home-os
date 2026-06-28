@@ -68,6 +68,11 @@ modules:
   #     live in recipe.yml so they only target the Aurora/x86 image.
   #     Verified aarch64 on Flathub: brave, obsidian, anki, xournalpp, bitwarden,
   #     ksnip, vlc, ytmdesktop, burpsuite (arch-indep JAR), protonvpn, pdfarranger.
+  #
+  #     NOTE: these install via a boot timer (30s after boot), NOT on
+  #     `rpm-ostree upgrade`. After an upgrade you must reboot, and the network
+  #     must be up. Trigger manually any time with:
+  #       sudo /usr/libexec/bluebuild/default-flatpaks/system-flatpak-setup
   - type: default-flatpaks
     configurations:
       - scope: system
