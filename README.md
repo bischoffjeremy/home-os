@@ -45,6 +45,20 @@ All images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/) 
 | <img src="https://icons.duckduckgo.com/ip3/protonvpn.com.ico" width="48"> | **ProtonVPN** - VPN client |
 | <img src="https://dl.flathub.org/media/com/github/jeromerobert.pdfarranger/be4cba4552137f343cab16b4ee68a747/icons/128x128/com.github.jeromerobert.pdfarranger.png" width="48"> | **PDF Arranger** - PDF editor |
 
+> **Note — Flatpak installation timing:** the default Flatpaks are installed by
+> a systemd **boot** timer (`system-flatpak-setup.timer`, 30 s after boot), *not*
+> by `rpm-ostree upgrade`. So after an upgrade you must **reboot**, and the
+> install also needs the network to be up at that point (on slow Wi-Fi the
+> boot-time run can fail and only retries on the next boot). To trigger it
+> manually at any time:
+>
+> ```bash
+> sudo /usr/libexec/bluebuild/default-flatpaks/system-flatpak-setup
+> ```
+>
+> Steam is x86_64-only and therefore lives in `recipe.yml` (os-base/Aurora only),
+> not in the shared list — see `recipes/common.yml`.
+
 ---
 
 ## Dev Containers
