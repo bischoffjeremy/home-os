@@ -1,7 +1,7 @@
 ---
 name: os-uconsole
 description: Private uConsole (CM4) image 
-base-image: ghcr.io/bischoffjeremy/kinoite-uconsole
+base-image: ghcr.io/bischoffjeremy/uconsole-fedora
 image-version: atomic
 
 modules:
