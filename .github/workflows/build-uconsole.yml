@@ -2,9 +2,9 @@ name: Build uConsole (private)
 
 # Builds the PRIVATE uConsole image from recipe-uconsole.yml (BlueBuild) and
 # pushes it to GHCR (os-uconsole:latest). It layers the shared home-os modules
-# (recipes/common.yml) on top of the public kinoite-uconsole "atomic" base.
+# (recipes/common.yml) on top of the public uconsole-fedora "atomic" base.
 #
-# On the device: flash the public kinoite-uconsole *atomic* image once, then
+# On the device: flash the public uconsole-fedora *atomic* image once, then
 #   rpm-ostree rebase ostree-unverified-registry:ghcr.io/<owner>/os-uconsole:latest
 # (see UCONSOLE.md). No flashable .img / bootc-image-builder / R2 here.
 
@@ -32,6 +32,6 @@ jobs:
       dockerfile: './Containerfile-uconsole'
       is_os_image: true
       recipe_path: 'recipe-uconsole.yml'
-      # ARM64 runner: the base image (kinoite-uconsole:atomic) is aarch64-only.
+      # ARM64 runner: the base image (uconsole-fedora:atomic) is aarch64-only.
       runner: 'ubuntu-24.04-arm'
     secrets: inherit
