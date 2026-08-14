@@ -1,4 +1,4 @@
 u fedora 1000 "Fedora User" /var/home/fedora /bin/bash
 m fedora wheel
-# input: evdev-Zugriff für Voxtype Push-to-Talk Hotkey-Erkennung
+# input: evdev-Zugriff (Hotkey-Erkennung, ydotool & Co. ohne root)
 m fedora input

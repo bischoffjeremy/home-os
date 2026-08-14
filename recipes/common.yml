@@ -1,20 +1,15 @@
 
 modules:
-  - type: rpm-ostree
+  # dnf5 instead of rpm-ostree: on the bootc-based Fedora 44 images
+  # `rpm-ostree install` aborts during the container build with
+  # "This system was not booted via libostree". BlueBuild marks the
+  # rpm-ostree module as superseded by dnf for bootc images.
+  - type: dnf
     install:
-      - passwd
-      - wireguard-tools
-      - podman-compose
-      # Voxtype runtime deps: wl-clipboard (paste-mode), libnotify (notifications),
-      # pipewire-alsa (audio), playerctl (pause media). wtype = Wayland default;
-      # not supported on KDE Plasma -> ydotool delivers the layout-independent
-      # Ctrl+V keystroke for paste-mode.
-      - wtype
-      - ydotool
-      - wl-clipboard
-      - libnotify
-      - pipewire-alsa
-      - playerctl
+      packages:
+        - passwd
+        - wireguard-tools
+        - podman-compose
 
   # --- Shared desktop configs (identical on both devices) ---
   #     CH keyboard (X11 + vconsole), de_CH locale, Europe/Zurich timezone, wallpaper.
