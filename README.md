@@ -12,20 +12,20 @@
 
 Custom Fedora Aurora NVIDIA-Open image based on Universal Blue with KDE Plasma and immutable bootc/OSTree. Built with BlueBuild, deployed via GitHub Actions.
 
-All images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/) and scanned for vulnerabilities with [Grype](https://github.com/anchore/grype).
+All images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/).
 
 ---
 
-## Build & Security Status
+## Build Status
 
-| Image | Build | Vuln Scan | Signed | Last Update |
-|:------|:-----:|:---------:|:------:|:------------|
-| **os-base** | [![Build OS](https://github.com/bischoffjeremy/home-os/actions/workflows/build.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build.yml) | ![Vuln Scan](https://img.shields.io/badge/grype-not%20scanned-lightgrey?logo=anchore) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated) |
-| **dev-general** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-general) |
-| **dev-docs** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-docs) |
-| **dev-media** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-media) |
-| **dev-pentest** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-pentest) |
-| **dev-citrix** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml) | [![Vuln Scan](https://img.shields.io/badge/grype-extras-brightgreen?logo=anchore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml) | [![Signed](https://img.shields.io/badge/cosign-signed-brightgreen?logo=sigstore)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml) | ![Updated](https://img.shields.io/github/last-commit/bischoffjeremy/home-os/master?label=updated&path=devcontainer/dev-citrix) |
+| Image | Build |
+|:------|:-----:|
+| **os-base** | [![Build OS](https://github.com/bischoffjeremy/home-os/actions/workflows/build.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build.yml) |
+| **dev-general** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) |
+| **dev-docs** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) |
+| **dev-media** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) |
+| **dev-pentest** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) |
+| **dev-citrix** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml) |
 
 ---
 
@@ -82,16 +82,10 @@ distrobox enter dev-general
 
 ## Supply-Chain Security
 
-All images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/) and scanned with [Grype](https://github.com/anchore/grype). Builds run daily and on every push.
-
-| Image | Report |
-|:------|:------:|
-| os-base | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build.yml) |
-| dev-general | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer.yml) |
-| dev-docs | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-docs.yml) |
-| dev-media | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) |
-| dev-pentest | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) |
-| dev-citrix | [Security Report](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml) |
+All images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/). The
+dev containers are additionally scanned with [Grype](https://github.com/anchore/grype);
+that scan is **informational only** — its report lands in the workflow's step summary
+and never fails a build.
 
 Verify any image:
 

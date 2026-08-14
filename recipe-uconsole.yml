@@ -6,10 +6,3 @@ image-version: atomic
 
 modules:
   - from-file: common.yml
-  - type: script
-    snippets:
-      - |
-        curl -fL --retry 3 -o /usr/bin/voxtype \
-          https://github.com/peteonrails/voxtype/releases/download/v0.7.5/voxtype-0.7.5-linux-aarch64-cpu
-      - chmod +x /usr/bin/voxtype
-      - /usr/bin/voxtype --version || true

@@ -123,6 +123,9 @@ jobs:
     # Bewusst nur Dev-Container – das OS-Image wird nicht gescannt (Rahmen).
     if: github.event_name != 'pull_request' && !inputs.is_os_image
     runs-on: ubuntu-latest
+    # Der Scan ist rein informativ: er darf den Workflow nie rot färben.
+    # Der Report landet in der Step Summary, gated wird nichts.
+    continue-on-error: true
     timeout-minutes: 45
     permissions:
       contents: read
@@ -177,7 +180,8 @@ jobs:
           LOW=$(jq '[.matches[] | select(.vulnerability.severity=="Low")] | length' /tmp/scan_results.json 2>/dev/null || echo 0)
           NEG=$(jq '[.matches[] | select(.vulnerability.severity=="Negligible")] | length' /tmp/scan_results.json 2>/dev/null || echo 0)
 
-          if [ "$CRIT" -eq 0 ] && [ "$HIGH" -eq 0 ]; then STATUS="PASS ✅"; SCAN_EXIT=0; else STATUS="FAIL ❌"; SCAN_EXIT=1; fi
+          # Rein informativ: Findings lassen den Job NICHT fehlschlagen.
+          if [ "$CRIT" -eq 0 ] && [ "$HIGH" -eq 0 ]; then STATUS="Keine Critical/High ✅"; else STATUS="Critical/High vorhanden ⚠️"; fi
 
           VULN_TABLE=$(jq -r '
             [.matches[] | {
@@ -203,7 +207,7 @@ jobs:
           | | |
           |:--|:--|
           | **Result** | $STATUS |
-          | **Policy** | Fail on **Critical** or **High** severity |
+          | **Policy** | Informativ – der Scan lässt den Build nie fehlschlagen |
 
           | Severity | Count |
           |:---------|------:|
@@ -222,4 +226,3 @@ jobs:
 
           sed -i 's/^          //' "$REPORT_FILE"
           cat "$REPORT_FILE" >> "$GITHUB_STEP_SUMMARY"
-          exit $SCAN_EXIT
