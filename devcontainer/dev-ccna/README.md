@@ -21,6 +21,13 @@ The box has its own home (`~/.local/share/distrobox-homes/dev-ccna`), so Packet 
 
 New Packet Tracer version: download the new .deb and run `setup.sh` again.
 
+## Practice with Claude
+
+1. In Packet Tracer: *File → New*.
+2. Pick any working folder (no git needed, labs are temporary), copy `CLAUDE.md` from this folder into it and start `claude` there.
+3. Ask for a lab. Claude builds it into the open project via `bin/pt` and puts the tasks into the network description (*i* icon, bottom right).
+4. Solve it, then tell Claude you are done. Claude reads the devices and grades.
+
 ## Bridge
 
 `PT-Bridge.pts` is `V5.2.pts` from [Mats2208/MCP-Packet-Tracer](https://github.com/Mats2208/MCP-Packet-Tracer) release v0.9.0
@@ -28,7 +35,7 @@ New Packet Tracer version: download the new .deb and run `setup.sh` again.
 Only its file mailbox is used, not the MCP server: Packet Tracer runs every `req_*.js` placed in
 `<box home>/AppData/Local/packet-tracer-mcp/bridge/` and writes the result to `res_*.txt`.
 Its own window (*Extensions → MCP BUILDER*, blue UI, shows "offline") is not needed and can stay closed.
-The client script is `bin/pt` in the ccna-lab repo.
+The client script is `bin/pt` in this folder.
 
 ## Remove
 

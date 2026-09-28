@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Steuert das laufende Packet Tracer über die Datei-Brücke des Moduls MCP-BUILDER.
+#   bin/pt js 'reportResult(ipc.network().getDeviceCount());'
+#   bin/pt build labs/01-dhcp-nat/build.js      Topologie aufbauen (ins leere Projekt), Tasks in die Network Description
+#   bin/pt desc labs/01-dhcp-nat/build.js       nur die Network Description setzen
+#   bin/pt cli R1 'show running-config'         Befehl auf einem Gerät ausführen
+#   bin/pt devices                              Geräte im Projekt auflisten
+set -euo pipefail
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+for box in dev-ccna ccna-pt; do
+    DIR="$HOME/.local/share/distrobox-homes/$box/AppData/Local/packet-tracer-mcp/bridge"
+    [[ -d "$DIR" ]] && break
+done
+
+send() {
+    local id; id="$(date +%s%N)"
+    # erst unter anderem Namen schreiben, dann umbenennen: PT liest nie eine halbe Datei
+    printf '%s' "$1" > "$DIR/tmp_$id.js"
+    mv "$DIR/tmp_$id.js" "$DIR/req_$id.js"
+    for _ in $(seq 1 300); do
+        if [[ -f "$DIR/res_$id.txt" ]]; then
+            cat "$DIR/res_$id.txt"; echo
+            rm -f "$DIR/res_$id.txt"
+            return 0
+        fi
+        sleep 0.2
+    done
+    echo "Keine Antwort von Packet Tracer nach 60 s (läuft das Modul MCP-BUILDER?)" >&2
+    return 1
+}
+
+q() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }   # als JS-String einbetten
+
+# Tasks und Fragen aus aufgabe.md (ab "## Tasks" bis vor "## Abgabe") als JS-String, ohne Markdown-Zeichen
+desc_js() {
+    sed -n '/^## Tasks/,/^## Abgabe/{/^## Abgabe/!p}' "$(dirname "$1")/aufgabe.md" \
+        | sed 's/\*//g; s/`//g; s/^## //' \
+        | python3 -c 'import json, sys; print(json.dumps(sys.stdin.read().strip()))'
+}
+
+case "${1:-}" in
+    js)      send "$2" ;;
+    build)   send "$(cat "$HERE/pt-lib.js" "$2"); ipc.appWindow().getActiveFile().setNetworkDescription($(desc_js "$2")); reportResult('Lab aufgebaut: ' + ipc.network().getDeviceCount() + ' Geräte');" ;;
+    desc)    send "ipc.appWindow().getActiveFile().setNetworkDescription($(desc_js "$2")); reportResult('Beschreibung gesetzt');" ;;
+    cli)     send "$(cat "$HERE/pt-lib.js"); reportResult(runCommand(\"$(q "$2")\", \"$(q "$3")\"));" ;;
+    devices) send 'var n=ipc.network(),a=[];for(var i=0;i<n.getDeviceCount();i++){var d=n.getDeviceAt(i);a.push(d.getName()+" ("+d.getModel()+")");}reportResult(a.join("\n"));' ;;
+    *)       sed -n "2,8p" "$0"; exit 1 ;;
+esac
