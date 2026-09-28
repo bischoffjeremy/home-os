@@ -11,9 +11,8 @@ DEB="$(ls -t "$HOME"/Downloads/CiscoPacketTracer_*_Ubuntu_64bit.deb | head -n1)"
 podman container exists "$BOX" || distrobox create --yes --name "$BOX" \
     --image ghcr.io/bischoffjeremy/dev-ccna:latest --home "$BOX_HOME"
 
-cp "$DEB" "$BOX_HOME/"
-distrobox enter "$BOX" -- sh -c "cd ~ && sudo apt-get install -y './$(basename "$DEB")'"
-rm -f "$BOX_HOME/$(basename "$DEB")"
+# the host filesystem is visible in the box under /run/host, no copy needed
+distrobox enter "$BOX" -- sudo apt-get install -y "/run/host$(realpath "$DEB")"
 
 # Bridge script module (file mailbox, lets Claude build and read topologies).
 # The module cannot create the parent folders of its mailbox itself.
