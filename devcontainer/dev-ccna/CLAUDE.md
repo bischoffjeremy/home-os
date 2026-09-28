@@ -14,7 +14,8 @@ script live in `~/Dokumente/repos/ccna-lab` (read its CLAUDE.md for how labs are
 
 ## Bridge (how Claude talks to Packet Tracer)
 
-- Script module **MCP-BUILDER** (`PT-Bridge.pts`, from Mats2208/MCP-Packet-Tracer v0.9.0) must be running in PT.
+- Script module **MCP-BUILDER** (`PT-Bridge.pts` in this folder = `V5.2.pts` from Mats2208/MCP-Packet-Tracer v0.9.0, MIT) must be running in PT.
+  It is kept in the repo on purpose, do not switch back to downloading it.
   Only its file mailbox is used, no MCP server, no HTTP. "offline" in its blue window refers to HTTP and is fine.
 - Mailbox: `<box home>/AppData/Local/packet-tracer-mcp/bridge/`. Heartbeat: `alive.txt` (ms timestamp, rewritten every 0.25–1.5 s).
   No fresh `alive.txt` → module not started (*Extensions → Scripting → Configure PT Script Modules → MCP-BUILDER → Start*).

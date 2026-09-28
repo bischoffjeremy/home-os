@@ -12,7 +12,7 @@ The box has its own home (`~/.local/share/distrobox-homes/dev-ccna`), so Packet 
    devcontainer/dev-ccna/setup.sh
    ```
    Creates the box from `ghcr.io/bischoffjeremy/dev-ccna`, installs the newest .deb (EULA: close the text with `q`, then accept)
-   and downloads the bridge module `PT-Bridge.pts` into the box home.
+   and copies the bridge module `PT-Bridge.pts` from this folder into the box home.
 3. Start: `distrobox enter dev-ccna -- packettracer`, or export the app with DistroShelf. Multi-user: **No**.
 4. Login: the box has no browser. In the login window under *Advanced Settings*, check
    **Use internal web browser for Cisco Networking Academy login**, then *LOGIN*.
@@ -23,7 +23,8 @@ New Packet Tracer version: download the new .deb and run `setup.sh` again.
 
 ## Bridge
 
-The bridge module comes from [Mats2208/MCP-Packet-Tracer](https://github.com/Mats2208/MCP-Packet-Tracer) (release v0.9.0).
+`PT-Bridge.pts` is `V5.2.pts` from [Mats2208/MCP-Packet-Tracer](https://github.com/Mats2208/MCP-Packet-Tracer) release v0.9.0
+(MIT, see `PT-Bridge.LICENSE`; sha256 `175f7755…d8bc071`).
 Only its file mailbox is used, not the MCP server: Packet Tracer runs every `req_*.js` placed in
 `<box home>/AppData/Local/packet-tracer-mcp/bridge/` and writes the result to `res_*.txt`.
 Its own window (*Extensions → MCP BUILDER*, blue UI, shows "offline") is not needed and can stay closed.

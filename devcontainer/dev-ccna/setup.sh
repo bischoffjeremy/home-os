@@ -16,6 +16,5 @@ distrobox enter "$BOX" -- sh -c "cd ~ && sudo apt-get install -y './$(basename "
 
 # Bridge script module (file mailbox, lets Claude build and read topologies).
 # The module cannot create the parent folders of its mailbox itself.
-curl -fL -o "$BOX_HOME/PT-Bridge.pts" \
-    https://github.com/Mats2208/MCP-Packet-Tracer/releases/download/v0.9.0/V5.2.pts
+cp "$(dirname "$0")/PT-Bridge.pts" "$BOX_HOME/"
 mkdir -p "$BOX_HOME/AppData/Local/packet-tracer-mcp/bridge"
