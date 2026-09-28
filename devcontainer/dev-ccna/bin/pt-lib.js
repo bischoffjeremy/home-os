@@ -41,6 +41,15 @@ function configurePcIp(name, dhcp, ip, mask, gateway, dns) {
     if (dns) { port.setDnsServerIp(dns); }
 }
 
+/* Aufgabentext als Notiz rechts oben auf die Arbeitsfläche und in die Network Description
+   (die Description zeigt PT erst nach Speichern/Neuladen an, die Notiz sofort). */
+function setTaskText(text) {
+    var lw = ipc.appWindow().getActiveWorkspace().getLogicalWorkspace();
+    var z = (typeof lw.getIncNoteZOrder === "function") ? lw.getIncNoteZOrder() : 0;
+    lw.addNote(750, 50, z, text);
+    ipc.appWindow().getActiveFile().setNetworkDescription(text);
+}
+
 /* Führt einen Befehl auf der CLI aus und gibt nur die neue Ausgabe zurück. */
 function runCommand(name, command) {
     var cl = ptCli(name);
@@ -51,5 +60,7 @@ function runCommand(name, command) {
     cl.enterCommand("terminal length 0");
     var before = String(cl.getOutput()).length;
     cl.enterCommand(command);
-    return String(cl.getOutput()).substring(before);
+    var out = String(cl.getOutput()).substring(before);
+    cl.enterCommand("disable");   /* Gerät wieder im Benutzermodus zurücklassen */
+    return out;
 }

@@ -31,7 +31,7 @@ Werkzeug: `PT=~/Dokumente/repos/home-os/home-os/devcontainer/dev-ccna/bin/pt` (d
 | Befehl | Zweck |
 |---|---|
 | `$PT devices` | Geräte im offenen Projekt auflisten |
-| `$PT build labs/NN-*/build.js` | Lab ins offene Projekt bauen, Tasks + Fragen aus `aufgabe.md` als Network Description (i-Symbol unten rechts in PT) |
+| `$PT build labs/NN-*/build.js` | Lab ins offene Projekt bauen, Tasks + Fragen aus `aufgabe.md` als Notiz auf der Arbeitsfläche (rechts oben) und als Network Description |
 | `$PT desc labs/NN-*/build.js` | nur die Network Description neu setzen |
 | `$PT cli R1 'show running-config'` | Befehl auf einem Gerät ausführen, Ausgabe zurück |
 | `$PT js '…; reportResult(x);'` | beliebiges IPC-JavaScript |

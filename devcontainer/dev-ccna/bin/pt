@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Steuert das laufende Packet Tracer über die Datei-Brücke des Moduls MCP-BUILDER.
 #   bin/pt js 'reportResult(ipc.network().getDeviceCount());'
-#   bin/pt build labs/01-dhcp-nat/build.js      Topologie aufbauen (ins leere Projekt), Tasks in die Network Description
+#   bin/pt build labs/01-dhcp-nat/build.js      Topologie aufbauen (ins leere Projekt), Tasks als Notiz + Network Description
 #   bin/pt desc labs/01-dhcp-nat/build.js       nur die Network Description setzen
 #   bin/pt cli R1 'show running-config'         Befehl auf einem Gerät ausführen
 #   bin/pt devices                              Geräte im Projekt auflisten
@@ -41,7 +41,7 @@ desc_js() {
 
 case "${1:-}" in
     js)      send "$2" ;;
-    build)   send "$(cat "$HERE/pt-lib.js" "$2"); ipc.appWindow().getActiveFile().setNetworkDescription($(desc_js "$2")); reportResult('Lab aufgebaut: ' + ipc.network().getDeviceCount() + ' Geräte');" ;;
+    build)   send "$(cat "$HERE/pt-lib.js" "$2"); setTaskText($(desc_js "$2")); reportResult('Lab aufgebaut: ' + ipc.network().getDeviceCount() + ' Geräte');" ;;
     desc)    send "ipc.appWindow().getActiveFile().setNetworkDescription($(desc_js "$2")); reportResult('Beschreibung gesetzt');" ;;
     cli)     send "$(cat "$HERE/pt-lib.js"); reportResult(runCommand(\"$(q "$2")\", \"$(q "$3")\"));" ;;
     devices) send 'var n=ipc.network(),a=[];for(var i=0;i<n.getDeviceCount();i++){var d=n.getDeviceAt(i);a.push(d.getName()+" ("+d.getModel()+")");}reportResult(a.join("\n"));' ;;
