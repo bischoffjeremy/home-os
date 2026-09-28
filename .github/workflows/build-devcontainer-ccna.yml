@@ -1,0 +1,29 @@
+name: Build Dev Container (dev-ccna)
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'devcontainer/dev-ccna/**'
+      - '.github/workflows/build-devcontainer-ccna.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'devcontainer/dev-ccna/**'
+      - '.github/workflows/build-devcontainer-ccna.yml'
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  build-and-scan:
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: ./.github/workflows/template-build-scan.yml
+    with:
+      image_name: 'dev-ccna'
+      context: './devcontainer/dev-ccna'
+      dockerfile: './devcontainer/dev-ccna/Containerfile'
+    secrets: inherit

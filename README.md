@@ -26,6 +26,7 @@ All images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/).
 | **dev-media** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-media.yml) |
 | **dev-pentest** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-pentest.yml) |
 | **dev-citrix** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-citrix.yml) |
+| **dev-ccna** | [![Build](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-ccna.yml/badge.svg)](https://github.com/bischoffjeremy/home-os/actions/workflows/build-devcontainer-ccna.yml) |
 
 ---
 
@@ -72,6 +73,7 @@ This project includes open-source Distrobox dev containers that anyone can use f
 | **dev-media** | GIMP, Inkscape, Krita, Kdenlive, Blender, Audacity | `ghcr.io/bischoffjeremy/dev-media:latest` |
 | **dev-pentest** | Kali MCP Server – MCP HTTP auf Port 8080 (`/mcp`) | `ghcr.io/bischoffjeremy/dev-pentest:latest` |
 | **dev-citrix** | Citrix Workspace App (ICAClient) – fully automated install | `ghcr.io/bischoffjeremy/dev-citrix:latest` |
+| **dev-ccna** | Runtime for Cisco Packet Tracer (installed via `setup.sh`, not included) | `ghcr.io/bischoffjeremy/dev-ccna:latest` |
 
 ```bash
 distrobox create --name dev-general --image ghcr.io/bischoffjeremy/dev-general:latest

@@ -1,0 +1,23 @@
+# Ubuntu instead of fedora-toolbox: Cisco only ships Packet Tracer as an Ubuntu .deb.
+FROM docker.io/library/ubuntu:22.04
+
+LABEL com.github.containers.toolbox="true" \
+      org.opencontainers.image.title="dev-ccna" \
+      org.opencontainers.image.description="Distrobox runtime for Cisco Packet Tracer (CCNA practice). Packet Tracer itself is not included – install it with setup.sh"
+
+# fuse: fusermount, so the PT AppImage can mount without root
+# libglib2.0-bin: gsettings, used by the PT activation script
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates dialog fuse libglib2.0-bin \
+        libgl1 libgl1-mesa-glx libegl1 libopengl0 libglib2.0-0 libdbus-1-3 \
+        libxcb-xinerama0 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+        libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-xkb1 libxkbcommon-x11-0 \
+        libnss3 libxss1 libxcomposite1 libxdamage1 libxrandr2 libxtst6 libxslt1.1 \
+        libasound2 libpulse0 fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+
+# PT bundles its own Qt: run it through XWayland.
+# The QtWebEngine (Chromium) sandbox used by the login window does not work in a container.
+ENV QT_QPA_PLATFORM=xcb \
+    QTWEBENGINE_DISABLE_SANDBOX=1
