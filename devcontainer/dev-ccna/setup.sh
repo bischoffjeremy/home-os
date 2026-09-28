@@ -14,5 +14,8 @@ podman container exists "$BOX" || distrobox create --yes --name "$BOX" \
 cp "$DEB" "$BOX_HOME/"
 distrobox enter "$BOX" -- sh -c "cd ~ && sudo apt-get install -y './$(basename "$DEB")'"
 
-# PTBuilder script module (builds lab topologies from JavaScript)
-curl -fsSL -o "$BOX_HOME/Builder.pts" https://github.com/kimmknight/PTBuilder/raw/main/Builder.pts
+# Bridge script module (file mailbox, lets Claude build and read topologies).
+# The module cannot create the parent folders of its mailbox itself.
+curl -fL -o "$BOX_HOME/PT-Bridge.pts" \
+    https://github.com/Mats2208/MCP-Packet-Tracer/releases/download/v0.9.0/V5.2.pts
+mkdir -p "$BOX_HOME/AppData/Local/packet-tracer-mcp/bridge"
