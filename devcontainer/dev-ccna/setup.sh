@@ -13,6 +13,7 @@ podman container exists "$BOX" || distrobox create --yes --name "$BOX" \
 
 cp "$DEB" "$BOX_HOME/"
 distrobox enter "$BOX" -- sh -c "cd ~ && sudo apt-get install -y './$(basename "$DEB")'"
+rm -f "$BOX_HOME/$(basename "$DEB")"
 
 # Bridge script module (file mailbox, lets Claude build and read topologies).
 # The module cannot create the parent folders of its mailbox itself.
