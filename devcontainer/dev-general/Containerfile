@@ -21,19 +21,6 @@ RUN curl -fsSL https://download.docker.com/linux/fedora/docker-ce.repo \
     && dnf install -y docker-ce-cli \
     && dnf clean all
 
-# ── Antigravity Repository ──
-RUN tee /etc/yum.repos.d/antigravity.repo << EOL
-[antigravity-rpm]
-name=Antigravity RPM Repository
-baseurl=https://us-central1-yum.pkg.dev/projects/antigravity-auto-updater-dev/antigravity-rpm
-enabled=1
-gpgcheck=0
-EOL
-
-RUN dnf makecache \
-    && dnf install -y antigravity \
-    && dnf clean all
-
 # ── Node Version Manager ──
 ENV NVM_DIR=/opt/nvm
 RUN mkdir -p "${NVM_DIR}" \
@@ -66,3 +53,14 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
 
 # ── Container-Socket ──
 COPY files/docker-host.sh /etc/profile.d/docker-host.sh
+
+# ── Starship-Prompt (statisches Release, Prüfsumme wird kontrolliert) ──
+RUN ARCH="$(uname -m)" \
+    && TGZ="starship-${ARCH}-unknown-linux-musl.tar.gz" \
+    && URL="https://github.com/starship/starship/releases/latest/download" \
+    && curl -fsSLO "${URL}/${TGZ}" \
+    && echo "$(curl -fsSL "${URL}/${TGZ}.sha256")  ${TGZ}" | sha256sum -c - \
+    && tar -xzf "${TGZ}" -C /usr/local/bin starship \
+    && rm -f "${TGZ}"
+COPY files/starship.toml /etc/starship.toml
+COPY files/starship.sh /etc/profile.d/starship.sh
