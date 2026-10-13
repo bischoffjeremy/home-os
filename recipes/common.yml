@@ -40,9 +40,7 @@ modules:
       # increase inotify watches
       - mkdir -p /usr/lib/sysctl.d
       - echo "fs.inotify.max_user_watches=524288" > /usr/lib/sysctl.d/90-inotify.conf
-      # enable root login (root:root)
-      - echo "root:root" | chpasswd
-      - passwd -u root
+      # (root login root:root moved to recipe-uconsole.yml: the notebook keeps root locked)
       # wireguard dir + timezone
       - mkdir -p /etc/wireguard
       - ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime
