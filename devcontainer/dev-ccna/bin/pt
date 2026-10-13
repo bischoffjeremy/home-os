@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Steuert das laufende Packet Tracer über die Datei-Brücke des Moduls MCP-BUILDER.
 #   bin/pt js 'reportResult(ipc.network().getDeviceCount());'
-#   bin/pt build labs/01-dhcp-nat/build.js      Topologie aufbauen (ins leere Projekt), Tasks als Notiz + Network Description
-#   bin/pt desc labs/01-dhcp-nat/build.js       nur die Network Description setzen
+#   bin/pt build labs/13-nat/01-pat/build.js      Topologie aufbauen (ins leere Projekt), Tasks als Notiz + Network Description
+#   bin/pt desc labs/13-nat/01-pat/build.js       Notiz + Network Description neu setzen (laufendes Lab)
 #   bin/pt cli R1 'show running-config'         Befehl auf einem Gerät ausführen
 #   bin/pt devices                              Geräte im Projekt auflisten
+#   bin/pt clear                                Projekt leeren (statt File → New), vor dem nächsten build
 set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -13,7 +14,26 @@ for box in dev-ccna ccna-pt; do
     [[ -d "$DIR" ]] && break
 done
 
+# Laufen zwei PT, lesen beide denselben Briefkasten und antworten abwechselnd: Build landet in der einen,
+# Jeremy schaut auf die andere. Zweite Instanz kommt z. B. vom Starter «(PTSA)» (pttp://-Links, -uri=).
+single_pt() {
+    local procs
+    # nur Prozesse namens PacketTracer; davon die Hauptprozesse (Helfer wie --progress-bar-server laufen mit vollem Pfad)
+    procs="$(ps -C PacketTracer -o pid=,lstart=,args= | grep -E ' \./PacketTracer( |$)' || true)"
+    if [[ -z "$procs" ]]; then
+        echo "Packet Tracer läuft nicht (kein ./PacketTracer-Prozess). Jeremy muss es starten, MCP-BUILDER startet mit." >&2
+        exit 1
+    fi
+    if (( $(grep -c . <<< "$procs") > 1 )); then
+        echo "Packet Tracer läuft mehrfach, Anfragen landen zufällig in einer der Instanzen:" >&2
+        echo "$procs" >&2
+        echo "Alle bis auf eine schliessen (Instanz ohne Fenster: kill <PID>), dann nochmals." >&2
+        exit 1
+    fi
+}
+
 send() {
+    single_pt
     local id; id="$(date +%s%N)"
     # erst unter anderem Namen schreiben, dann umbenennen: PT liest nie eine halbe Datei
     printf '%s' "$1" > "$DIR/tmp_$id.js"
@@ -32,18 +52,30 @@ send() {
 
 q() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }   # als JS-String einbetten
 
-# Tasks und Fragen aus aufgabe.md (ab "## Tasks" bis vor "## Abgabe") als JS-String, ohne Markdown-Zeichen
+# aufgabe.md ohne Titelzeile bis vor "## Abgabe" als JS-String: Guidelines, Topologie, Adresstabellen, Tasks.
+# Wie in der Prüfung muss die Adresstabelle bei der Aufgabe stehen. Markdown-Zeichen weg, Tabellen als "a | b | c".
 desc_js() {
-    sed -n '/^## Tasks/,/^## Abgabe/{/^## Abgabe/!p}' "$(dirname "$1")/aufgabe.md" \
-        | sed 's/\*//g; s/`//g; s/^## //' \
-        | python3 -c 'import json, sys; print(json.dumps(sys.stdin.read().strip()))'
+    sed -n '2,/^## Abgabe/{/^## Abgabe/!p}' "$(dirname "$1")/aufgabe.md" \
+        | python3 -c '
+import json, re, sys
+out = []
+for line in sys.stdin.read().splitlines():
+    if line.startswith("```"):
+        continue
+    if line.startswith("|"):
+        if re.fullmatch(r"\|[\s|:-]+\|", line):   # Trennzeile |---|---|
+            continue
+        line = " | ".join(c.strip() for c in line.strip("|").split("|"))
+    out.append(re.sub(r"^## ", "", line.replace("*", "").replace("`", "")))
+print(json.dumps("\n".join(out).strip()))'
 }
 
 case "${1:-}" in
     js)      send "$2" ;;
-    build)   send "$(cat "$HERE/pt-lib.js" "$2"); setTaskText($(desc_js "$2")); reportResult('Lab aufgebaut: ' + ipc.network().getDeviceCount() + ' Geräte');" ;;
-    desc)    send "ipc.appWindow().getActiveFile().setNetworkDescription($(desc_js "$2")); reportResult('Beschreibung gesetzt');" ;;
+    build)   send "$(cat "$HERE/pt-lib.js" "$2"); removeExtraPdd(); setTaskText($(desc_js "$2")); reportResult('Lab aufgebaut: ' + ipc.network().getDeviceCount() + ' Geräte. ' + checkLayout());" ;;
+    desc)    send "$(cat "$HERE/pt-lib.js"); updateTaskText($(desc_js "$2")); reportResult('Notiz und Beschreibung aktualisiert');" ;;
     cli)     send "$(cat "$HERE/pt-lib.js"); reportResult(runCommand(\"$(q "$2")\", \"$(q "$3")\"));" ;;
+    clear)   send "$(cat "$HERE/pt-lib.js"); reportResult('Entfernt: ' + clearProject() + ' Geräte, übrig: ' + ipc.network().getDeviceCount());" ;;
     devices) send 'var n=ipc.network(),a=[];for(var i=0;i<n.getDeviceCount();i++){var d=n.getDeviceAt(i);a.push(d.getName()+" ("+d.getModel()+")");}reportResult(a.join("\n"));' ;;
     *)       sed -n "2,8p" "$0"; exit 1 ;;
 esac
