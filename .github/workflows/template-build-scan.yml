@@ -114,9 +114,19 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && !inputs.is_os_image }}
         run: cosign sign --yes "${{ env.IMAGE }}@${{ steps.build.outputs.digest }}"
 
-      - name: Sign image with Cosign (keyless) - OS Image
+      # OS images are signed with the repo key: hosts on `ostree-image-signed:`
+      # verify against cosign.pub (installed by the `signing` module).
+      - name: Sign image with Cosign (key) - OS Image
         if: ${{ github.event_name != 'pull_request' && inputs.is_os_image }}
-        run: cosign sign --yes "${{ env.IMAGE }}@${{ steps.build_os.outputs.digest }}"
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_PASSWORD: ""
+        run: |
+          if [ -z "$COSIGN_PRIVATE_KEY" ]; then
+            echo "::error::Secret SIGNING_SECRET fehlt – Image wird nicht signiert."
+            exit 1
+          fi
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${{ env.IMAGE }}@${{ steps.build_os.outputs.digest }}"
 
   scan:
     needs: build

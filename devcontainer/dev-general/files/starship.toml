@@ -1,0 +1,73 @@
+# Starship prompt for the dev containers (installed to /etc/starship.toml).
+# Needs a Nerd Font in the terminal for the icons.
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+
+[line_break]
+disabled = false
+
+[character]
+success_symbol = '[➜](bold green) '
+error_symbol = '[✗](bold red) '
+
+[username]
+style_user = 'blue bold'
+style_root = 'red bold'
+format = '[$user]($style) '
+show_always = true
+
+# Hostname is the host's ("aurora") inside a box -> the container module names the box
+[hostname]
+disabled = true
+
+[container]
+symbol = '⬢ '
+format = '[$symbol\[$name\]]($style) '
+style = 'bold purple'
+
+# Distro of the box (Fedora, Ubuntu, Kali ...)
+[os]
+disabled = false
+format = '[$symbol]($style)'
+style = 'bold blue'
+
+[os.symbols]
+Fedora = " "
+Ubuntu = " "
+Debian = " "
+Kali = " "
+Arch = " "
+Alpine = " "
+Linux = " "
+
+[directory]
+read_only = " 󰌾"
+format = 'in [$path](bold yellow) '
+
+[git_branch]
+symbol = " "
+
+[git_commit]
+tag_symbol = "  "
+
+[docker_context]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rust]
+symbol = "󱘗 "
+
+[golang]
+symbol = " "
+
+[java]
+symbol = " "
+
+[c]
+symbol = " "

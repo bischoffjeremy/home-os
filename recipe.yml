@@ -2,7 +2,8 @@
 name: os-base
 description: Custom Aurora NVIDIA system with extras, Flatpaks & CH keyboard
 base-image: ghcr.io/ublue-os/aurora-nvidia-open
-image-version: latest
+# stable = Aurora's conservative stream (gated kernel); latest tracks the newest Fedora kernel
+image-version: stable
 
 modules:
   - from-file: common.yml
@@ -10,6 +11,20 @@ modules:
   - type: kargs
     kargs:
       - video=eDP-1:2560x1600@120
+
+  # Host CLI tools from signed repos: gh from Fedora, claude-code from Anthropic.
+  # The Anthropic key is pinned in files/dnf/ (fingerprint 31DD DE24 DDFA B679
+  # F42D 7BD2 BAA9 29FF 1A7E CACE, checked against code.claude.com/docs).
+  - type: dnf
+    repos:
+      files:
+        - claude-code.repo
+      keys:
+        - claude-code.asc
+    install:
+      packages:
+        - gh
+        - claude-code
 
   # x86-only Flatpaks: no aarch64 build on Flathub, so they must NOT go in the
   # shared common.yml list (would abort the whole uConsole install). Steam is
@@ -20,12 +35,10 @@ modules:
         install:
           - com.valvesoftware.Steam
 
-  # Notebook-specific configs: starship (ships with Aurora/ublue, not Kinoite),
-  # declarative "fedora" user + subuid/subgid for toolbox / rootless containers.
+  # Notebook-specific configs: declarative "fedora" user + subuid/subgid for
+  # toolbox / rootless containers.
   - type: files
     files:
-      - source: starship.toml
-        destination: /usr/etc/starship.toml
       - source: fedora-user.sysusers
         destination: /usr/lib/sysusers.d/50-fedora.conf
       - source: fedora-home.tmpfiles
@@ -34,3 +47,7 @@ modules:
         destination: /usr/etc/subuid
       - source: subgid
         destination: /usr/etc/subgid
+
+  # Verify updates: installs the container signing policy for this image, so
+  # `ostree-image-signed:` only accepts images signed with cosign.pub.
+  - type: signing

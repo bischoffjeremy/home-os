@@ -6,3 +6,10 @@ image-version: atomic
 
 modules:
   - from-file: common.yml
+
+  # Root login (root:root) for console access on the uConsole, unchanged from
+  # before. Deliberately not in common.yml: the notebook keeps root locked.
+  - type: script
+    snippets:
+      - echo "root:root" | chpasswd
+      - passwd -u root
