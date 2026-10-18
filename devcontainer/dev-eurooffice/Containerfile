@@ -1,0 +1,30 @@
+FROM registry.fedoraproject.org/fedora-toolbox:latest
+
+LABEL com.github.containers.toolbox="true" \
+      org.opencontainers.image.title="dev-eurooffice" \
+      org.opencontainers.image.description="Toolbox for Euro-Office Desktop Editors – documents, spreadsheets, presentations & PDF"
+
+# ── Euro-Office Desktop Editors ──
+# The RPM is unsigned, so the version is pinned and checked against the
+# SHA256 digest GitHub publishes for the release asset.
+# Bump: curl -s https://api.github.com/repos/Euro-Office/DesktopEditors/releases/latest \
+#         | jq -r '.tag_name, (.assets[] | select(.name|endswith("x86_64.rpm")) | .digest)'
+ARG EO_VERSION=9.3.5-2
+ARG EO_SHA256=ae94adf29af02f50fc2d6f323b9442216e81fbef6afa9a969cb198765e1d6025
+
+# libglvnd-opengl (libOpenGL.so.0) and xcb-util-cursor are not pulled in by
+# the RPM, but the editor does not start without them.
+RUN curl -fsSL -o /tmp/euro-office.rpm \
+      "https://github.com/Euro-Office/DesktopEditors/releases/download/v${EO_VERSION}/euro-office-euro-office-${EO_VERSION}.x86_64.rpm" \
+    && echo "${EO_SHA256}  /tmp/euro-office.rpm" | sha256sum -c - \
+    && dnf install -y /tmp/euro-office.rpm libglvnd-opengl xcb-util-cursor \
+    && rm -f /tmp/euro-office.rpm \
+    && dnf clean all
+
+# ── Smoke test: fail the build if the editor binary misses a shared library ──
+# Same library path as the /usr/bin launcher.
+RUN test -x /usr/bin/euro-office-euro-office \
+    && ! LD_LIBRARY_PATH=/opt/euro-office/euro-office:/opt/euro-office/euro-office/converter \
+         ldd /opt/euro-office/euro-office/DesktopEditors | grep "not found"
+
+WORKDIR /workspace
